@@ -7,6 +7,7 @@
 
 import UIKit
 
+
 class DiaryViewController: UIViewController {
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
@@ -19,6 +20,7 @@ class DiaryViewController: UIViewController {
     
     private let segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["Classic", "Article", "Gallery"])
+        control.selectedSegmentIndex = 0
         return control
     }()
     
@@ -43,6 +45,10 @@ class DiaryViewController: UIViewController {
         DiaryViewController.createLayout(for: .collection)
     }))
     
+    private let galleryCollectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewCompositionalLayout(sectionProvider: { index, _ in
+        DiaryViewController.createLayout(for: .gallery)
+    }))
+    
     private let classicTableView = UITableView()
 
     override func viewDidLoad() {
@@ -59,11 +65,12 @@ class DiaryViewController: UIViewController {
         navigationItem.searchController = searchView
         navigationItem.hidesSearchBarWhenScrolling = false
         
+        searchView.searchBar.delegate = self
+        
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange(_:)), for: .valueChanged)
     }
     
     @objc func segmentedControlDidChange(_ sender: UISegmentedControl){
-        print("Debug: segmented control value did change: \(sender.selectedSegmentIndex)")
         
         UIView.animate(withDuration: 0.4) {
             self.scrollView.contentOffset.x = CGFloat(sender.selectedSegmentIndex)*self.view.frame.width
@@ -100,15 +107,27 @@ class DiaryViewController: UIViewController {
             
         case .gallery:
             // item
-            let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+            let horizontalItemOne = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)))
+            let horizontalItemTwo = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1.0)))
+            let horizontalGroupOne = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.3)), subitems: [horizontalItemOne, horizontalItemTwo])
+            
+            let bigItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.4)))
+            
+            let horizontalItemThree = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0)))
+            let horizontalItemFour = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.5), heightDimension: .fractionalHeight(1.0)))
+            let horizontalGroupTwo = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.3)), subitems: [horizontalItemThree, horizontalItemFour])
+            
+            let horizontalItemFive = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1.0)))
+            let horizontalItemSix = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1.0)))
+            let horizontalGroupThree = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.3)), subitems: [horizontalItemFive, horizontalItemSix])
+
             
             // group
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.12), heightDimension: .fractionalHeight(1.0)), subitems: [item])
+            let group = NSCollectionLayoutGroup.vertical(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.7)), subitems: [horizontalGroupOne, bigItem, horizontalGroupTwo, horizontalGroupThree])
             
             // section
             let section = NSCollectionLayoutSection(group: group)
-            
-            
+
             return section
         }
     }
@@ -134,11 +153,19 @@ class DiaryViewController: UIViewController {
     }
     
     private func setUpCollectionView(){
+        // CollectionView
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(DiaryCollectionViewCell.self, forCellWithReuseIdentifier: DiaryCollectionViewCell.identifier)
         collectionView.register(DiaryCollectionViewHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DiaryCollectionViewHeaderView.identifier)
+        
+        // Gallery collectionView
+        galleryCollectionView.delegate = self
+        galleryCollectionView.dataSource = self
+        galleryCollectionView.register(GalleryCollectionViewCell.self, forCellWithReuseIdentifier: GalleryCollectionViewCell.identifier)
+        
         scrollView.addSubview(collectionView)
+        scrollView.addSubview(galleryCollectionView)
     }
     
     override func viewDidLayoutSubviews() {
@@ -148,6 +175,7 @@ class DiaryViewController: UIViewController {
         scrollView.frame = view.bounds
         classicTableView.frame = scrollView.bounds
         collectionView.frame = CGRect(x: scrollView.frame.width, y: 0, width: view.frame.width, height: view.frame.height)
+        galleryCollectionView.frame = CGRect(x: scrollView.frame.width*2, y: 0, width: view.frame.width, height: view.frame.height)
     }
 
 }
@@ -198,13 +226,27 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DiaryCollectionViewCell.identifier, for: indexPath) as? DiaryCollectionViewCell else {
-            return UICollectionViewCell()
+        
+        if collectionView == self.collectionView{
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DiaryCollectionViewCell.identifier, for: indexPath) as? DiaryCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            
+            cell.configure()
+            
+            return cell
+        }else if collectionView == self.galleryCollectionView{
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryCollectionViewCell.identifier, for: indexPath) as? GalleryCollectionViewCell else{
+                return UICollectionViewCell()
+            }
+            
+            cell.configure()
+            
+            return cell
         }
         
-        cell.configure()
+        return UICollectionViewCell()
         
-        return cell
     }
     
     
@@ -224,7 +266,7 @@ extension DiaryViewController: UIScrollViewDelegate{
             segmentedControl.selectedSegmentIndex = 2
         }
         
-        if offset < view.frame.width*0.6{
+        if offset < view.frame.width*0.6 && offset > 1{
             segmentedControl.selectedSegmentIndex = 0
         }
     }
@@ -235,3 +277,9 @@ extension DiaryViewController: UISearchControllerDelegate{
     
 }
 
+
+extension DiaryViewController: UISearchBarDelegate{
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    }
+}
