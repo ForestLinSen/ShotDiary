@@ -61,7 +61,7 @@ class ClassicDiaryTableViewCell: UITableViewCell{
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let imageSize = frame.height*0.7
+        let imageSize = frame.height*0.6
         let imageYPos = (frame.height-imageSize)/2
         let titleHeight = CGFloat(20)
         let padding = CGFloat(20)
@@ -70,7 +70,7 @@ class ClassicDiaryTableViewCell: UITableViewCell{
         titleLabel.frame = CGRect(x: imageSize+padding*2, y: imageYPos, width: frame.width-imageSize-padding*3, height: titleHeight)
         dateLabel.frame = CGRect(x: imageSize+padding*2, y: imageYPos+titleHeight, width: 100, height: titleHeight)
         contentPreviewLabel.frame = CGRect(x: imageSize+padding*2, y: imageYPos+titleHeight*2,
-                                           width: frame.width-imageSize-padding*2, height: frame.height-titleHeight*2-padding)
+                                           width: frame.width-imageSize-padding*2, height: frame.height-titleHeight*2-padding*2)
     }
     
     override func prepareForReuse() {
