@@ -17,6 +17,9 @@
 		B9B8621D281FE531004D1B75 /* WritingDiaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8621C281FE531004D1B75 /* WritingDiaryViewController.swift */; };
 		B9B8621F281FE563004D1B75 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8621E281FE563004D1B75 /* SettingsViewController.swift */; };
 		B9B86223281FEC32004D1B75 /* ClassicDiaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B86222281FEC32004D1B75 /* ClassicDiaryTableViewCell.swift */; };
+		B9B8622728201F51004D1B75 /* DiaryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622628201F51004D1B75 /* DiaryCollectionViewCell.swift */; };
+		B9B8622A282027C9004D1B75 /* PageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B86229282027C8004D1B75 /* PageKind.swift */; };
+		B9B8622C28203057004D1B75 /* DiaryCollectionViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +35,9 @@
 		B9B8621C281FE531004D1B75 /* WritingDiaryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WritingDiaryViewController.swift; sourceTree = "<group>"; };
 		B9B8621E281FE563004D1B75 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		B9B86222281FEC32004D1B75 /* ClassicDiaryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClassicDiaryTableViewCell.swift; sourceTree = "<group>"; };
+		B9B8622628201F51004D1B75 /* DiaryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryCollectionViewCell.swift; sourceTree = "<group>"; };
+		B9B86229282027C8004D1B75 /* PageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageKind.swift; sourceTree = "<group>"; };
+		B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryCollectionViewHeaderView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,6 +70,7 @@
 		B9B86205281FE386004D1B75 /* ShotDiary */ = {
 			isa = PBXGroup;
 			children = (
+				B9B86228282027B8004D1B75 /* Models */,
 				B9B86220281FEBFD004D1B75 /* Views */,
 				B9B86206281FE386004D1B75 /* AppDelegate.swift */,
 				B9B86208281FE386004D1B75 /* SceneDelegate.swift */,
@@ -91,8 +98,18 @@
 			isa = PBXGroup;
 			children = (
 				B9B86222281FEC32004D1B75 /* ClassicDiaryTableViewCell.swift */,
+				B9B8622628201F51004D1B75 /* DiaryCollectionViewCell.swift */,
+				B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */,
 			);
 			path = Diary;
+			sourceTree = "<group>";
+		};
+		B9B86228282027B8004D1B75 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B9B86229282027C8004D1B75 /* PageKind.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -170,8 +187,11 @@
 				B9B8621B281FE506004D1B75 /* DiaryViewController.swift in Sources */,
 				B9B8621D281FE531004D1B75 /* WritingDiaryViewController.swift in Sources */,
 				B9B8620B281FE386004D1B75 /* HomeViewController.swift in Sources */,
+				B9B8622C28203057004D1B75 /* DiaryCollectionViewHeaderView.swift in Sources */,
 				B9B86207281FE386004D1B75 /* AppDelegate.swift in Sources */,
+				B9B8622A282027C9004D1B75 /* PageKind.swift in Sources */,
 				B9B86209281FE386004D1B75 /* SceneDelegate.swift in Sources */,
+				B9B8622728201F51004D1B75 /* DiaryCollectionViewCell.swift in Sources */,
 				B9B8621F281FE563004D1B75 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
