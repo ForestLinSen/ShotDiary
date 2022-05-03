@@ -38,6 +38,7 @@ class DiaryViewController: UIViewController {
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.bounces = false
         scrollView.contentInsetAdjustmentBehavior = .never
+        scrollView.backgroundColor = .systemBackground
         return scrollView
     }()
     
@@ -64,7 +65,7 @@ class DiaryViewController: UIViewController {
         navigationItem.titleView = segmentedControl
         navigationItem.searchController = searchView
         navigationItem.hidesSearchBarWhenScrolling = false
-        
+             
         searchView.searchBar.delegate = self
         
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange(_:)), for: .valueChanged)
@@ -92,7 +93,7 @@ class DiaryViewController: UIViewController {
             // item
             let item = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
             
-            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 10)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 10)
             
             // group
             let group = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.30), heightDimension: .fractionalHeight(0.18)), subitems: [item])
@@ -149,6 +150,7 @@ class DiaryViewController: UIViewController {
         classicTableView.register(ClassicDiaryTableViewCell.self, forCellReuseIdentifier: ClassicDiaryTableViewCell.identifier)
         classicTableView.delegate = self
         classicTableView.dataSource = self
+        classicTableView.backgroundColor = .systemBackground
         scrollView.addSubview(classicTableView)
     }
     
@@ -158,6 +160,7 @@ class DiaryViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.register(DiaryCollectionViewCell.self, forCellWithReuseIdentifier: DiaryCollectionViewCell.identifier)
         collectionView.register(DiaryCollectionViewHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DiaryCollectionViewHeaderView.identifier)
+        collectionView.backgroundColor = .systemBackground
         
         // Gallery collectionView
         galleryCollectionView.delegate = self

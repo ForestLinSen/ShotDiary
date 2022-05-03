@@ -37,6 +37,7 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(previewImage)
         contentView.addSubview(titleLabel)
         contentView.addSubview(dateLabel)
+        backgroundColor = .systemBackground
     }
     
     required init?(coder: NSCoder) {

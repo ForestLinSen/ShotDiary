@@ -12,6 +12,12 @@ class HomeViewController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        let appearance = UITabBarAppearance()
+//        appearance.configureWithOpaqueBackground()
+//        appearance.backgroundColor = K.mainBlack
+//        tabBar.standardAppearance = appearance
+        
+
         let diaryVC = UINavigationController(rootViewController: DiaryViewController())
         let writingVC = UINavigationController(rootViewController: WritingDiaryViewController())
         let settingsVC = UINavigationController(rootViewController: SettingsViewController())

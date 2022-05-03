@@ -21,6 +21,7 @@ class DiaryCollectionViewHeaderView: UICollectionReusableView{
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(sectionLabel)
+        backgroundColor = .systemBackground
     }
     
     required init?(coder: NSCoder) {
