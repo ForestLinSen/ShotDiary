@@ -22,6 +22,7 @@ class WritingDiaryViewController: UIViewController {
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
     var fileName: String?
+    let playerViewController = AVPlayerViewController()
     weak var delegate: WritingDiaryViewControllerDelegate?
     
     private let titleEditor: UITextField = {
@@ -113,23 +114,21 @@ class WritingDiaryViewController: UIViewController {
             print("Debug: video url \(url)")
             self?.player = AVPlayer(url: url)
             self?.playerLayer = AVPlayerLayer(player: self?.player)
+            self?.playerViewController.player = AVPlayer(url: url)
             
-            let playerSize = CGFloat(300)
-            self?.playerLayer!.frame = CGRect(x: ((self?.view.frame.width)!-playerSize)/2, y: (self?.addVideoButton.frame.origin.y)!, width: playerSize, height: playerSize)
-            self?.playerLayer!.cornerRadius = 25
-            self?.playerLayer!.masksToBounds = true
+            let playerSize = (self?.view.frame.width)!*0.8
             
-            self?.playerLayer!.videoGravity = .resizeAspectFill
-            self?.playerLayer!.backgroundColor = UIColor.systemBlue.cgColor
-            self?.view.layer.addSublayer((self?.playerLayer)!)
-            self?.player!.play()
+            self?.view.addSubview((self?.playerViewController.view)!)
+            self?.playerViewController.view.frame = CGRect(x: ((self?.view.frame.width)!-playerSize)/2, y: (self?.addVideoButton.frame.origin.y)!, width: playerSize, height: playerSize*0.618)
+            self?.playerViewController.view.layer.cornerRadius = 15
+            self?.playerViewController.view.clipsToBounds = true
+
         }
-        
-        
-        
+ 
     }
     
     //MARK: - Button functions
+    
     @objc func didTapPostButton(){
         let currentPath = FileManager.default.currentDirectoryPath
         print("Debug: current path -> \(currentPath)")
