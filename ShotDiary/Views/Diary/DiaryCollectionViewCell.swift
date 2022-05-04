@@ -57,10 +57,10 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         dateLabel.frame = CGRect(x: 0, y: imageSize+labelHeight+padding, width: frame.width, height: labelHeight)
     }
     
-    func configure(){
-        previewImage.image = UIImage(named: "Samoyed")
-        titleLabel.text = "My dog has made a mess of himself"
-        dateLabel.text = "May 2, 2022"
+    func configure(with viewModel: DiaryViewModel){
+        previewImage.image = viewModel.getPreviewImage()
+        titleLabel.text = viewModel.title
+        dateLabel.text = viewModel.date.description
     }
     
     override func prepareForReuse() {

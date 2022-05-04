@@ -7,10 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B933994E2820EEAA00F779C0 /* DiaryDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B933994C2820EEAA00F779C0 /* DiaryDataModel.xcdatamodeld */; };
+		B933994E2820EEAA00F779C0 /* ShotDiary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B933994C2820EEAA00F779C0 /* ShotDiary.xcdatamodeld */; };
 		B962D87228212C4E00CF8B63 /* video.mov in Resources */ = {isa = PBXBuildFile; fileRef = B962D87128212C4E00CF8B63 /* video.mov */; };
 		B962D875282142A300CF8B63 /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D874282142A300CF8B63 /* K.swift */; };
 		B962D87728216B7400CF8B63 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D87628216B7400CF8B63 /* Helper.swift */; };
+		B962D87A28218E0D00CF8B63 /* Diary+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D87828218E0D00CF8B63 /* Diary+CoreDataClass.swift */; };
+		B962D87B28218E0D00CF8B63 /* Diary+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D87928218E0D00CF8B63 /* Diary+CoreDataProperties.swift */; };
+		B962D87E28218FB200CF8B63 /* CoreDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D87D28218FB200CF8B63 /* CoreDataManager.swift */; };
+		B962D881282190D000CF8B63 /* DiaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D880282190D000CF8B63 /* DiaryViewModel.swift */; };
 		B9B86207281FE386004D1B75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B86206281FE386004D1B75 /* AppDelegate.swift */; };
 		B9B86209281FE386004D1B75 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B86208281FE386004D1B75 /* SceneDelegate.swift */; };
 		B9B8620B281FE386004D1B75 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8620A281FE386004D1B75 /* HomeViewController.swift */; };
@@ -28,10 +32,14 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B933994D2820EEAA00F779C0 /* DiaryDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DiaryDataModel.xcdatamodel; sourceTree = "<group>"; };
+		B933994D2820EEAA00F779C0 /* DiaryDataModel.xcdatamodel */ = {isa = PBXFileReference; explicitFileType = wrapper.xcdatamodel; path = DiaryDataModel.xcdatamodel; sourceTree = "<group>"; };
 		B962D87128212C4E00CF8B63 /* video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = video.mov; sourceTree = "<group>"; };
 		B962D874282142A300CF8B63 /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		B962D87628216B7400CF8B63 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		B962D87828218E0D00CF8B63 /* Diary+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Diary+CoreDataClass.swift"; sourceTree = "<group>"; };
+		B962D87928218E0D00CF8B63 /* Diary+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Diary+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		B962D87D28218FB200CF8B63 /* CoreDataManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataManager.swift; sourceTree = "<group>"; };
+		B962D880282190D000CF8B63 /* DiaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryViewModel.swift; sourceTree = "<group>"; };
 		B9B86203281FE386004D1B75 /* ShotDiary.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShotDiary.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B9B86206281FE386004D1B75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B9B86208281FE386004D1B75 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -88,6 +96,22 @@
 			path = Constants;
 			sourceTree = "<group>";
 		};
+		B962D87C28218FA300CF8B63 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				B962D87D28218FB200CF8B63 /* CoreDataManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		B962D87F282190BF00CF8B63 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				B962D880282190D000CF8B63 /* DiaryViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		B9B861FA281FE386004D1B75 = {
 			isa = PBXGroup;
 			children = (
@@ -107,6 +131,10 @@
 		B9B86205281FE386004D1B75 /* ShotDiary */ = {
 			isa = PBXGroup;
 			children = (
+				B962D87F282190BF00CF8B63 /* ViewModels */,
+				B962D87C28218FA300CF8B63 /* Manager */,
+				B962D87828218E0D00CF8B63 /* Diary+CoreDataClass.swift */,
+				B962D87928218E0D00CF8B63 /* Diary+CoreDataProperties.swift */,
 				B962D8732821429700CF8B63 /* Constants */,
 				B933994F2820EF2600F779C0 /* Controllers */,
 				B9B86228282027B8004D1B75 /* Models */,
@@ -119,7 +147,7 @@
 				B9B8620F281FE388004D1B75 /* Assets.xcassets */,
 				B9B86211281FE388004D1B75 /* LaunchScreen.storyboard */,
 				B9B86214281FE388004D1B75 /* Info.plist */,
-				B933994C2820EEAA00F779C0 /* DiaryDataModel.xcdatamodeld */,
+				B933994C2820EEAA00F779C0 /* ShotDiary.xcdatamodeld */,
 			);
 			path = ShotDiary;
 			sourceTree = "<group>";
@@ -226,15 +254,19 @@
 				B9B86223281FEC32004D1B75 /* ClassicDiaryTableViewCell.swift in Sources */,
 				B962D87728216B7400CF8B63 /* Helper.swift in Sources */,
 				B9B8621B281FE506004D1B75 /* DiaryViewController.swift in Sources */,
+				B962D87A28218E0D00CF8B63 /* Diary+CoreDataClass.swift in Sources */,
+				B962D87E28218FB200CF8B63 /* CoreDataManager.swift in Sources */,
 				B9B8621D281FE531004D1B75 /* WritingDiaryViewController.swift in Sources */,
+				B962D881282190D000CF8B63 /* DiaryViewModel.swift in Sources */,
 				B9B8620B281FE386004D1B75 /* HomeViewController.swift in Sources */,
 				B9B8622C28203057004D1B75 /* DiaryCollectionViewHeaderView.swift in Sources */,
 				B962D875282142A300CF8B63 /* K.swift in Sources */,
 				B9B86207281FE386004D1B75 /* AppDelegate.swift in Sources */,
 				B9B8622A282027C9004D1B75 /* PageKind.swift in Sources */,
-				B933994E2820EEAA00F779C0 /* DiaryDataModel.xcdatamodeld in Sources */,
+				B933994E2820EEAA00F779C0 /* ShotDiary.xcdatamodeld in Sources */,
 				B9B86209281FE386004D1B75 /* SceneDelegate.swift in Sources */,
 				B9B8622E28204709004D1B75 /* GalleryCollectionViewCell.swift in Sources */,
+				B962D87B28218E0D00CF8B63 /* Diary+CoreDataProperties.swift in Sources */,
 				B9B8622728201F51004D1B75 /* DiaryCollectionViewCell.swift in Sources */,
 				B9B8621F281FE563004D1B75 /* SettingsViewController.swift in Sources */,
 			);
@@ -456,13 +488,13 @@
 /* End XCConfigurationList section */
 
 /* Begin XCVersionGroup section */
-		B933994C2820EEAA00F779C0 /* DiaryDataModel.xcdatamodeld */ = {
+		B933994C2820EEAA00F779C0 /* ShotDiary.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
 				B933994D2820EEAA00F779C0 /* DiaryDataModel.xcdatamodel */,
 			);
 			currentVersion = B933994D2820EEAA00F779C0 /* DiaryDataModel.xcdatamodel */;
-			path = DiaryDataModel.xcdatamodeld;
+			path = ShotDiary.xcdatamodeld;
 			sourceTree = "<group>";
 			versionGroupType = wrapper.xcdatamodel;
 		};

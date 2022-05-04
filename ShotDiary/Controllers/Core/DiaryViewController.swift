@@ -51,6 +51,8 @@ class DiaryViewController: UIViewController {
     }))
     
     private let classicTableView = UITableView()
+    
+    private var diaryViewModels = [DiaryViewModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -69,6 +71,14 @@ class DiaryViewController: UIViewController {
         searchView.searchBar.delegate = self
         
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange(_:)), for: .valueChanged)
+        
+        CoreDataManager.shared.getAllItems {[weak self] viewModels in
+            guard let viewModels = viewModels else {
+                return
+            }
+
+            self?.diaryViewModels = viewModels
+        }
     }
     
     @objc func segmentedControlDidChange(_ sender: UISegmentedControl){
@@ -184,9 +194,10 @@ class DiaryViewController: UIViewController {
 }
 
 
+// MARK: Set Up TableView
 extension DiaryViewController: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return diaryViewModels.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -194,8 +205,8 @@ extension DiaryViewController: UITableViewDelegate, UITableViewDataSource{
         guard let cell = tableView.dequeueReusableCell(withIdentifier: ClassicDiaryTableViewCell.identifier, for: indexPath) as? ClassicDiaryTableViewCell else {
             return UITableViewCell()
         }
-        cell.configure()
-        
+        cell.configure(with: diaryViewModels[indexPath.row])
+        cell.loadTestVideo(filePath: URL(string: diaryViewModels[indexPath.row].fileURL)!)
         return cell
         
         
@@ -207,10 +218,11 @@ extension DiaryViewController: UITableViewDelegate, UITableViewDataSource{
 }
 
 
+// MARK: Set Up CollectionView
 extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 5
+        return 1
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -225,7 +237,7 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 100
+        return diaryViewModels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -235,7 +247,7 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
                 return UICollectionViewCell()
             }
             
-            cell.configure()
+            cell.configure(with: diaryViewModels[indexPath.row])
             
             return cell
         }else if collectionView == self.galleryCollectionView{

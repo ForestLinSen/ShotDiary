@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import AVFoundation
+import AVKit
 
 class ClassicDiaryTableViewCell: UITableViewCell{
     static let identifier = "ClassicDiaryTableViewCell"
@@ -82,10 +84,20 @@ class ClassicDiaryTableViewCell: UITableViewCell{
         dateLabel.text = nil
     }
     
-    func configure(){
-        previewImageView.image = UIImage(named: "Samoyed")
-        titleLabel.text = "My dog has made a mess of himself"
-        dateLabel.text = "May 2, 2022"
-        contentPreviewLabel.text = "When 5-month-old Samoyed puppy Onni returned from a doggie playdate, his owners had quite the clean-up task ahead of them. The dog‘s strikingly white fur was covered in mud from head to paw — well, except for his adorable face, which maintained its color despite the dirt everywhere else."
+    func configure(with viewModel: DiaryViewModel){
+        previewImageView.image = viewModel.getPreviewImage()
+        titleLabel.text = viewModel.title
+        dateLabel.text = viewModel.date.description
+        contentPreviewLabel.text = viewModel.content
+//        contentPreviewLabel.text = "When 5-month-old Samoyed puppy Onni returned from a doggie playdate, his owners had quite the clean-up task ahead of them. The dog‘s strikingly white fur was covered in mud from head to paw — well, except for his adorable face, which maintained its color despite the dirt everywhere else."
+    }
+    
+    func loadTestVideo(filePath: URL){
+        let playerItem = AVPlayerItem(url: filePath)
+        let player = AVPlayer(playerItem: playerItem)
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.frame = frame
+        layer.addSublayer(playerLayer)
+        player.play()
     }
 }

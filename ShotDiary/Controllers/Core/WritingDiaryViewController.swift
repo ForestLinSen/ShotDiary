@@ -66,6 +66,10 @@ class WritingDiaryViewController: UIViewController {
         
         displayChosenVideo()
         
+        CoreDataManager.shared.getAllItems { viewModels in
+            
+        }
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -95,7 +99,6 @@ class WritingDiaryViewController: UIViewController {
     func displayChosenVideo(){
         guard let url = videoURL else { return }
         
-        print("Debug: begin to display file url")
         DispatchQueue.main.async {[weak self] in
             //let videoURL = URL(string: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4")
             //guard let videoURL = Bundle.main.url(forResource: "video", withExtension: "mov") else { return }
@@ -118,106 +121,84 @@ class WritingDiaryViewController: UIViewController {
         
     }
     
-    // MARK: - Button functions
+    //MARK: - Button functions
     @objc func didTapPostButton(){
-        print("Debug: did tap post button")
-        
+        let currentPath = FileManager.default.currentDirectoryPath
+        print("Debug: current path -> \(currentPath)")
+
         guard videoURL != nil else{
             let alert = UIAlertController(title: "Whoops", message: "Please Upload a Video", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel))
             present(alert, animated: true)
             return
         }
-        
-        // https://iosdevcenters.blogspot.com/2016/04/save-and-get-image-from-document.html
-        // https://stackoverflow.com/questions/39108385/how-do-i-get-nsdata-from-a-video-url
-        
-    //https://stackoverflow.com/questions/54290842/how-to-store-files-in-folder-which-is-created-by-using-documentdirectory-swift
+
+        //https://stackoverflow.com/questions/54290842/how-to-store-files-in-folder-which-is-created-by-using-documentdirectory-swift
         let fileManager = FileManager.default
-        
         let folderName = "userVideos"
         let documentsFolder = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
         let folderURL = documentsFolder.appendingPathComponent(folderName)
         let folderExists = (try? folderURL.checkResourceIsReachable()) ?? false
-        
+
         do{
             if !folderExists{
                 try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: false)
             }
-            
-            let fileURL = folderURL.appendingPathComponent(Helper.generateVideoFileName())
+
+            let fileName = Helper.generateVideoFileName()
+            let fileURL = folderURL.appendingPathComponent(fileName)
             let data = try Data(contentsOf: videoURL!)
             try data.write(to: fileURL)
-            
+
+            let viewModel = DiaryViewModel(title: titleEditor.text ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName, date: Date())
+
+            CoreDataManager.shared.createItems(viewModel: viewModel){ success in
+                print("Debug: create item status -> \(fileURL)")
+            }
+
             loadTestVideo(filePath: fileURL)
-            
+
         }catch{
             print("Debug: something wrong \(error)")
         }
     }
     
-//
-//    do{
-//        let fileData = try Data(contentsOf: videoURL!)
-//        let path = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-//
-//        if !fileManager.fileExists(atPath: videoFolder){
-//
-//            try fileManager.createDirectory(at: videoFolder.path, withIntermediateDirectories: <#T##Bool#>)
-//
-//            print("Debug: video name \(videoFileName)")
-//            if fileManager.createFile(atPath: videoFileName, contents: fileData as Data, attributes: nil){
-//                print("Debug: successfully create file data")
-//            }else{
-//                print("Debug: error write data ")
-//            }
-//        }
-//
-//    }catch{
-//        print("Debug: error create data")
-//    }
+    private func loadTestVideo(filePath: URL){
 
-
-
-
-private func loadTestVideo(filePath: URL){
-
-    print("Debug: file :\(filePath)")
-    let playerItem = AVPlayerItem(url: filePath)
-    let player = AVPlayer(playerItem: playerItem)
-    let playerLayer = AVPlayerLayer(player: player)
-    playerLayer.frame = self.view.frame
-    self.view.layer.addSublayer(playerLayer)
-    player.play()
-}
-
-@objc func didTapAddVideoButton(){
-    let actionsheet = UIAlertController(title: "Choose a Video", message: "Choose a video from your library or take a video", preferredStyle: .actionSheet)
-    actionsheet.addAction(UIAlertAction(title: "Video Library", style: .default, handler: {[weak self] _ in
-        self?.presentVideoPicker()
-    }))
-    actionsheet.addAction(UIAlertAction(title: "Take a Video", style: .default, handler: { _ in
-        
-    }))
-    actionsheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-    present(actionsheet, animated: true)
-}
-
-@objc func presentVideoPicker(){
-    var config = PHPickerConfiguration(photoLibrary: .shared())
-    config.filter = .videos
-    config.selectionLimit = 1
-    let vc = PHPickerViewController(configuration: config)
-    vc.delegate = self
-    present(vc, animated: true)
+        let playerItem = AVPlayerItem(url: filePath)
+        let player = AVPlayer(playerItem: playerItem)
+        let playerLayer = AVPlayerLayer(player: player)
+        playerLayer.frame = self.view.frame
+        self.view.layer.addSublayer(playerLayer)
+        player.play()
+    }
     
-}
-
+    @objc func didTapAddVideoButton(){
+        let actionsheet = UIAlertController(title: "Choose a Video", message: "Choose a video from your library or take a video", preferredStyle: .actionSheet)
+        actionsheet.addAction(UIAlertAction(title: "Video Library", style: .default, handler: {[weak self] _ in
+            self?.presentVideoPicker()
+        }))
+        actionsheet.addAction(UIAlertAction(title: "Take a Video", style: .default, handler: { _ in
+            
+        }))
+        actionsheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(actionsheet, animated: true)
+    }
+    
+    @objc func presentVideoPicker(){
+        var config = PHPickerConfiguration(photoLibrary: .shared())
+        config.filter = .videos
+        config.selectionLimit = 1
+        let vc = PHPickerViewController(configuration: config)
+        vc.delegate = self
+        present(vc, animated: true)
+        
+    }
+    
 }
 
 extension WritingDiaryViewController: UITextViewDelegate, UITextPasteDelegate{
     func textViewDidBeginEditing(_ textView: UITextView) {
-        print("Debug: did begin editing")
         if textView.textColor == .secondaryLabel{
             textView.text = ""
             textView.textColor = .label
@@ -250,7 +231,7 @@ extension WritingDiaryViewController: PHPickerViewControllerDelegate{
                 return
             }
             
-            print("Debug: unwrapped: \(url)")
+            print("Debug: viedeo url -> \(url)")
             
             self?.videoURL = url
             self?.displayChosenVideo()
