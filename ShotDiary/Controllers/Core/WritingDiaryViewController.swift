@@ -15,6 +15,7 @@ class WritingDiaryViewController: UIViewController {
     
     var videoURL: URL?
     var player: AVPlayer?
+    var fileName: String?
     
     
     private let titleEditor: UITextField = {
@@ -101,7 +102,8 @@ class WritingDiaryViewController: UIViewController {
         
         DispatchQueue.main.async {[weak self] in
             //let videoURL = URL(string: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4")
-            //guard let videoURL = Bundle.main.url(forResource: "video", withExtension: "mov") else { return }
+            //guard let url = Bundle.main.url(forResource: "video", withExtension: "mp4") else { return }
+            //print("Debug: peaky blidner url -> \(url)")
             print("Debug: video url \(url)")
             let player = AVPlayer(url: url)
             let playerLayer = AVPlayerLayer(player: player)
@@ -125,46 +127,52 @@ class WritingDiaryViewController: UIViewController {
     @objc func didTapPostButton(){
         let currentPath = FileManager.default.currentDirectoryPath
         print("Debug: current path -> \(currentPath)")
-
+        
         guard videoURL != nil else{
             let alert = UIAlertController(title: "Whoops", message: "Please Upload a Video", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .cancel))
             present(alert, animated: true)
             return
         }
-
+        
         //https://stackoverflow.com/questions/54290842/how-to-store-files-in-folder-which-is-created-by-using-documentdirectory-swift
-        let fileManager = FileManager.default
-        let folderName = "userVideos"
-        let documentsFolder = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
-        let folderURL = documentsFolder.appendingPathComponent(folderName)
+        let folderURL = getFolderURL()
         let folderExists = (try? folderURL.checkResourceIsReachable()) ?? false
-
+        
         do{
             if !folderExists{
-                try fileManager.createDirectory(at: folderURL, withIntermediateDirectories: false)
+                try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: false)
             }
-
-            let fileName = Helper.generateVideoFileName()
-            let fileURL = folderURL.appendingPathComponent(fileName)
+            
+            guard fileName != nil else { return }
+            let fileURL = folderURL.appendingPathComponent(fileName!)
             let data = try Data(contentsOf: videoURL!)
             try data.write(to: fileURL)
-
-            let viewModel = DiaryViewModel(title: titleEditor.text ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName, date: Date())
-
+            
+            let viewModel = DiaryViewModel(title: titleEditor.text ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date())
+            
             CoreDataManager.shared.createItems(viewModel: viewModel){ success in
                 print("Debug: create item status -> \(fileURL)")
             }
-
+            
             loadTestVideo(filePath: fileURL)
-
+            
         }catch{
             print("Debug: something wrong \(error)")
         }
     }
     
+    private func getFolderURL() -> URL{
+        let fileManager = FileManager.default
+        let folderName = "userVideos"
+        let documentsFolder = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let folderURL = documentsFolder.appendingPathComponent(folderName)
+        return folderURL
+    }
+    
+    
     private func loadTestVideo(filePath: URL){
-
+        
         let playerItem = AVPlayerItem(url: filePath)
         let player = AVPlayer(playerItem: playerItem)
         let playerLayer = AVPlayerLayer(player: player)
@@ -189,6 +197,7 @@ class WritingDiaryViewController: UIViewController {
         var config = PHPickerConfiguration(photoLibrary: .shared())
         config.filter = .videos
         config.selectionLimit = 1
+        config.preferredAssetRepresentationMode = .current
         let vc = PHPickerViewController(configuration: config)
         vc.delegate = self
         present(vc, animated: true)
@@ -225,17 +234,46 @@ extension WritingDiaryViewController: PHPickerViewControllerDelegate{
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         
-        results.first?.itemProvider.loadItem(forTypeIdentifier: UTType.movie.identifier, options: nil, completionHandler: {[weak self] videoURL, error in
-            
-            guard let url = videoURL as? URL else {
+        results.first?.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier, completionHandler: {[weak self] url, error in
+            guard let url = url else {
                 return
             }
             
-            print("Debug: viedeo url -> \(url)")
+            print("Debug: file exists -> \(FileManager.default.fileExists(atPath: url.path))")
             
-            self?.videoURL = url
-            self?.displayChosenVideo()
+            self?.fileName = Helper.generateVideoFileName()
+            let folder = self?.getFolderURL()
+            let filePath = folder!.appendingPathComponent((self?.fileName!)!)
+            let folderExists = (try? folder!.checkResourceIsReachable()) ?? false
+            
+            do{
+                if !folderExists{
+                    try FileManager.default.createDirectory(at: folder!, withIntermediateDirectories: false)
+                }
+                
+                try FileManager.default.copyItem(at: url, to: filePath)
+                self?.videoURL = filePath
+                self?.displayChosenVideo()
+                
+            }catch{
+                print("Debug: something wrong -> \(error)")
+            }
+            
+            
         })
+        
+        
+        
+        //        results.first?.itemProvider.loadItem(forTypeIdentifier: UTType.movie.identifier, options: nil, completionHandler: {[weak self] pickerURL, error in
+        //            guard let url = pickerURL as? URL else {
+        //                return
+        //            }
+        //
+        //            print("Debug: viedeo url -> \(url)")
+        //            self?.videoURL = url
+        //            self?.displayChosenVideo()
+        //
+        //        })
         
     }
 }

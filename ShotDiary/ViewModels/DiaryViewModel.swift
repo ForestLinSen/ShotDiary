@@ -32,7 +32,6 @@ class DiaryViewModel{
         let url = getRelativeFilePath()
         let asset = AVURLAsset(url: url)
         let imageGenerator = AVAssetImageGenerator(asset: asset)
-        print("Debug: asset duration: \(asset.duration)")
         let duration = asset.duration
         
         

@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		B933994E2820EEAA00F779C0 /* ShotDiary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B933994C2820EEAA00F779C0 /* ShotDiary.xcdatamodeld */; };
-		B962D87228212C4E00CF8B63 /* video.mov in Resources */ = {isa = PBXBuildFile; fileRef = B962D87128212C4E00CF8B63 /* video.mov */; };
 		B962D875282142A300CF8B63 /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D874282142A300CF8B63 /* K.swift */; };
 		B962D87728216B7400CF8B63 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D87628216B7400CF8B63 /* Helper.swift */; };
 		B962D87A28218E0D00CF8B63 /* Diary+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D87828218E0D00CF8B63 /* Diary+CoreDataClass.swift */; };
@@ -29,11 +28,11 @@
 		B9B8622A282027C9004D1B75 /* PageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B86229282027C8004D1B75 /* PageKind.swift */; };
 		B9B8622C28203057004D1B75 /* DiaryCollectionViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */; };
 		B9B8622E28204709004D1B75 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622D28204709004D1B75 /* GalleryCollectionViewCell.swift */; };
+		B9BDAF6128225B6400E50EEA /* video.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = B9BDAF6028225B6400E50EEA /* video.mp4 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B933994D2820EEAA00F779C0 /* DiaryDataModel.xcdatamodel */ = {isa = PBXFileReference; explicitFileType = wrapper.xcdatamodel; path = DiaryDataModel.xcdatamodel; sourceTree = "<group>"; };
-		B962D87128212C4E00CF8B63 /* video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = video.mov; sourceTree = "<group>"; };
 		B962D874282142A300CF8B63 /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		B962D87628216B7400CF8B63 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		B962D87828218E0D00CF8B63 /* Diary+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Diary+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -56,6 +55,7 @@
 		B9B86229282027C8004D1B75 /* PageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageKind.swift; sourceTree = "<group>"; };
 		B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryCollectionViewHeaderView.swift; sourceTree = "<group>"; };
 		B9B8622D28204709004D1B75 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
+		B9BDAF6028225B6400E50EEA /* video.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = video.mp4; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,11 +143,11 @@
 				B9B86208281FE386004D1B75 /* SceneDelegate.swift */,
 				B9B8620A281FE386004D1B75 /* HomeViewController.swift */,
 				B9B8620C281FE386004D1B75 /* Main.storyboard */,
-				B962D87128212C4E00CF8B63 /* video.mov */,
 				B9B8620F281FE388004D1B75 /* Assets.xcassets */,
 				B9B86211281FE388004D1B75 /* LaunchScreen.storyboard */,
 				B9B86214281FE388004D1B75 /* Info.plist */,
 				B933994C2820EEAA00F779C0 /* ShotDiary.xcdatamodeld */,
+				B9BDAF6028225B6400E50EEA /* video.mp4 */,
 			);
 			path = ShotDiary;
 			sourceTree = "<group>";
@@ -237,7 +237,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B962D87228212C4E00CF8B63 /* video.mov in Resources */,
+				B9BDAF6128225B6400E50EEA /* video.mp4 in Resources */,
 				B9B86213281FE388004D1B75 /* LaunchScreen.storyboard in Resources */,
 				B9B86210281FE388004D1B75 /* Assets.xcassets in Resources */,
 				B9B8620E281FE386004D1B75 /* Main.storyboard in Resources */,
