@@ -11,12 +11,18 @@ import PhotosUI
 import AVFoundation
 import AVKit
 
+
+protocol WritingDiaryViewControllerDelegate: UIViewController{
+    func writingDiaryViewControllerDidFinishPosting(_ controller: WritingDiaryViewController, newItem: DiaryViewModel)
+}
+
 class WritingDiaryViewController: UIViewController {
     
     var videoURL: URL?
     var player: AVPlayer?
+    var playerLayer: AVPlayerLayer?
     var fileName: String?
-    
+    weak var delegate: WritingDiaryViewControllerDelegate?
     
     private let titleEditor: UITextField = {
         let titleEditor = UITextField()
@@ -105,18 +111,18 @@ class WritingDiaryViewController: UIViewController {
             //guard let url = Bundle.main.url(forResource: "video", withExtension: "mp4") else { return }
             //print("Debug: peaky blidner url -> \(url)")
             print("Debug: video url \(url)")
-            let player = AVPlayer(url: url)
-            let playerLayer = AVPlayerLayer(player: player)
+            self?.player = AVPlayer(url: url)
+            self?.playerLayer = AVPlayerLayer(player: self?.player)
             
             let playerSize = CGFloat(300)
-            playerLayer.frame = CGRect(x: ((self?.view.frame.width)!-playerSize)/2, y: (self?.addVideoButton.frame.origin.y)!, width: playerSize, height: playerSize)
-            playerLayer.cornerRadius = 25
-            playerLayer.masksToBounds = true
+            self?.playerLayer!.frame = CGRect(x: ((self?.view.frame.width)!-playerSize)/2, y: (self?.addVideoButton.frame.origin.y)!, width: playerSize, height: playerSize)
+            self?.playerLayer!.cornerRadius = 25
+            self?.playerLayer!.masksToBounds = true
             
-            playerLayer.videoGravity = .resizeAspectFill
-            playerLayer.backgroundColor = UIColor.systemBlue.cgColor
-            self?.view.layer.addSublayer(playerLayer)
-            player.play()
+            self?.playerLayer!.videoGravity = .resizeAspectFill
+            self?.playerLayer!.backgroundColor = UIColor.systemBlue.cgColor
+            self?.view.layer.addSublayer((self?.playerLayer)!)
+            self?.player!.play()
         }
         
         
@@ -149,13 +155,31 @@ class WritingDiaryViewController: UIViewController {
             let data = try Data(contentsOf: videoURL!)
             try data.write(to: fileURL)
             
-            let viewModel = DiaryViewModel(title: titleEditor.text ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date())
             
-            CoreDataManager.shared.createItems(viewModel: viewModel){ success in
+            // FOR TEST
+            let date1 = Date.parse("2022-01-01")
+            let date2 = Date.parse("2022-05-01")
+            
+            let viewModel = DiaryViewModel(title: titleEditor.text ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date.randomBetween(start: date1, end: date2))
+            
+            CoreDataManager.shared.createItems(viewModel: viewModel){[weak self] success in
+                guard let strongSelf = self else { return }
                 print("Debug: create item status -> \(fileURL)")
+                
+                UIView.animate(withDuration: 0.2) {
+                    strongSelf.tabBarController?.selectedIndex = 0
+                }
+
+                strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
+                strongSelf.titleEditor.text = nil
+                strongSelf.videoURL = nil
+                strongSelf.fileName = nil
+                strongSelf.textEditor.text = nil
+                strongSelf.player?.pause()
+                strongSelf.player = nil
+                strongSelf.playerLayer?.removeFromSuperlayer()
             }
             
-            loadTestVideo(filePath: fileURL)
             
         }catch{
             print("Debug: something wrong \(error)")
@@ -169,18 +193,7 @@ class WritingDiaryViewController: UIViewController {
         let folderURL = documentsFolder.appendingPathComponent(folderName)
         return folderURL
     }
-    
-    
-    private func loadTestVideo(filePath: URL){
-        
-        let playerItem = AVPlayerItem(url: filePath)
-        let player = AVPlayer(playerItem: playerItem)
-        let playerLayer = AVPlayerLayer(player: player)
-        playerLayer.frame = self.view.frame
-        self.view.layer.addSublayer(playerLayer)
-        player.play()
-    }
-    
+
     @objc func didTapAddVideoButton(){
         let actionsheet = UIAlertController(title: "Choose a Video", message: "Choose a video from your library or take a video", preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction(title: "Video Library", style: .default, handler: {[weak self] _ in
@@ -230,7 +243,7 @@ extension WritingDiaryViewController: UITextViewDelegate, UITextPasteDelegate{
 
 
 extension WritingDiaryViewController: PHPickerViewControllerDelegate{
-    // https://stackoverflow.com/questions/63397033/how-to-fetch-live-photo-or-video-from-phpickerviewcontroller-delegate
+    // https://developer.apple.com/forums/thread/652695
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         
@@ -258,22 +271,7 @@ extension WritingDiaryViewController: PHPickerViewControllerDelegate{
             }catch{
                 print("Debug: something wrong -> \(error)")
             }
-            
-            
         })
-        
-        
-        
-        //        results.first?.itemProvider.loadItem(forTypeIdentifier: UTType.movie.identifier, options: nil, completionHandler: {[weak self] pickerURL, error in
-        //            guard let url = pickerURL as? URL else {
-        //                return
-        //            }
-        //
-        //            print("Debug: viedeo url -> \(url)")
-        //            self?.videoURL = url
-        //            self?.displayChosenVideo()
-        //
-        //        })
         
     }
 }

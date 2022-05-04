@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B9323C0F2822AD3900E25F24 /* GroupedDiaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9323C0E2822AD3900E25F24 /* GroupedDiaryViewModel.swift */; };
 		B933994E2820EEAA00F779C0 /* ShotDiary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B933994C2820EEAA00F779C0 /* ShotDiary.xcdatamodeld */; };
 		B962D875282142A300CF8B63 /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D874282142A300CF8B63 /* K.swift */; };
 		B962D87728216B7400CF8B63 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D87628216B7400CF8B63 /* Helper.swift */; };
@@ -32,6 +33,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B9323C0E2822AD3900E25F24 /* GroupedDiaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedDiaryViewModel.swift; sourceTree = "<group>"; };
 		B933994D2820EEAA00F779C0 /* DiaryDataModel.xcdatamodel */ = {isa = PBXFileReference; explicitFileType = wrapper.xcdatamodel; path = DiaryDataModel.xcdatamodel; sourceTree = "<group>"; };
 		B962D874282142A300CF8B63 /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
 		B962D87628216B7400CF8B63 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
@@ -87,13 +89,13 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
-		B962D8732821429700CF8B63 /* Constants */ = {
+		B962D8732821429700CF8B63 /* Helper */ = {
 			isa = PBXGroup;
 			children = (
 				B962D874282142A300CF8B63 /* K.swift */,
 				B962D87628216B7400CF8B63 /* Helper.swift */,
 			);
-			path = Constants;
+			path = Helper;
 			sourceTree = "<group>";
 		};
 		B962D87C28218FA300CF8B63 /* Manager */ = {
@@ -108,6 +110,7 @@
 			isa = PBXGroup;
 			children = (
 				B962D880282190D000CF8B63 /* DiaryViewModel.swift */,
+				B9323C0E2822AD3900E25F24 /* GroupedDiaryViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -135,7 +138,7 @@
 				B962D87C28218FA300CF8B63 /* Manager */,
 				B962D87828218E0D00CF8B63 /* Diary+CoreDataClass.swift */,
 				B962D87928218E0D00CF8B63 /* Diary+CoreDataProperties.swift */,
-				B962D8732821429700CF8B63 /* Constants */,
+				B962D8732821429700CF8B63 /* Helper */,
 				B933994F2820EF2600F779C0 /* Controllers */,
 				B9B86228282027B8004D1B75 /* Models */,
 				B9B86220281FEBFD004D1B75 /* Views */,
@@ -264,6 +267,7 @@
 				B9B86207281FE386004D1B75 /* AppDelegate.swift in Sources */,
 				B9B8622A282027C9004D1B75 /* PageKind.swift in Sources */,
 				B933994E2820EEAA00F779C0 /* ShotDiary.xcdatamodeld in Sources */,
+				B9323C0F2822AD3900E25F24 /* GroupedDiaryViewModel.swift in Sources */,
 				B9B86209281FE386004D1B75 /* SceneDelegate.swift in Sources */,
 				B9B8622E28204709004D1B75 /* GalleryCollectionViewCell.swift in Sources */,
 				B962D87B28218E0D00CF8B63 /* Diary+CoreDataProperties.swift in Sources */,

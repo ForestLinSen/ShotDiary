@@ -36,7 +36,7 @@ class GalleryCollectionViewCell: UICollectionViewCell{
         diaryImageView.image = nil
     }
     
-    func configure(){
-        diaryImageView.image = UIImage(named: "Corgi")
+    func configure(with image: UIImage){
+        diaryImageView.image = image
     }
 }

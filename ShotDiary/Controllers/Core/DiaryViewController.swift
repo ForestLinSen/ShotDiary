@@ -19,7 +19,7 @@ class DiaryViewController: UIViewController {
     }
     
     private let segmentedControl: UISegmentedControl = {
-        let control = UISegmentedControl(items: ["Classic", "Article", "Gallery"])
+        let control = UISegmentedControl(items: ["Classic", "Collection", "Gallery"])
         control.selectedSegmentIndex = 0
         return control
     }()
@@ -53,6 +53,7 @@ class DiaryViewController: UIViewController {
     private let classicTableView = UITableView()
     
     private var diaryViewModels = [DiaryViewModel]()
+    private var groupedSections = [GroupedDiaryViewModel]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,22 +73,41 @@ class DiaryViewController: UIViewController {
         
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange(_:)), for: .valueChanged)
         
+        fetchData()
+    }
+    
+    
+    private func fetchData(){
         CoreDataManager.shared.getAllItems {[weak self] viewModels in
             guard let viewModels = viewModels else {
                 return
             }
 
             self?.diaryViewModels = viewModels
+            
+            let groupedViewModels = Dictionary(grouping: viewModels) { $0.group }
+            self?.groupedSections = groupedViewModels.map {GroupedDiaryViewModel(sectionName: $0.key, viewModels: $0.value)}
+            self?.sortData()
         }
     }
     
-    @objc func segmentedControlDidChange(_ sender: UISegmentedControl){
+    private func sortData(){
         
+        diaryViewModels.sort { prev, next in
+            return prev.date > next.date
+        }
+        
+        groupedSections.sort(by: { prev, next in
+            return (prev.viewModels.first?.date ?? Date()) > (next.viewModels.first?.date ?? Date())
+        })
+    }
+    
+    
+    @objc func segmentedControlDidChange(_ sender: UISegmentedControl){
         UIView.animate(withDuration: 0.4) {
             self.scrollView.contentOffset.x = CGFloat(sender.selectedSegmentIndex)*self.view.frame.width
         }
-        
-        
+
     }
     
     // MARK: - UI Set Up
@@ -222,7 +242,12 @@ extension DiaryViewController: UITableViewDelegate, UITableViewDataSource{
 extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSource{
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
+        
+        if collectionView == self.collectionView{
+            return groupedSections.count
+        }else{
+            return 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
@@ -230,14 +255,21 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
             return UICollectionReusableView()
         }
         
-        cell.configure(with: "May 2022")
+        cell.configure(with: groupedSections[indexPath.section].sectionName)
         
         return cell
 
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return diaryViewModels.count
+        
+        if collectionView == self.collectionView{
+            return groupedSections[section].viewModels.count
+        }else{
+            return diaryViewModels.count
+        }
+        
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -247,21 +279,23 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
                 return UICollectionViewCell()
             }
             
-            cell.configure(with: diaryViewModels[indexPath.row])
-            
+            let viewModel = groupedSections[indexPath.section].viewModels[indexPath.row]
+            cell.configure(with: viewModel)
+
             return cell
         }else if collectionView == self.galleryCollectionView{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GalleryCollectionViewCell.identifier, for: indexPath) as? GalleryCollectionViewCell else{
                 return UICollectionViewCell()
             }
             
-            cell.configure()
-            
+            if let image = diaryViewModels[indexPath.row].getPreviewImage(){
+                cell.configure(with: image)
+            }
+                
             return cell
         }
         
         return UICollectionViewCell()
-        
     }
     
     
@@ -294,7 +328,33 @@ extension DiaryViewController: UISearchControllerDelegate{
 
 
 extension DiaryViewController: UISearchBarDelegate{
-    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
     }
+}
+
+
+extension DiaryViewController: WritingDiaryViewControllerDelegate{
+    func writingDiaryViewControllerDidFinishPosting(_ controller: WritingDiaryViewController, newItem: DiaryViewModel) {
+        self.diaryViewModels.append(newItem)
+
+        var found = false
+        
+        for groupedViewModel in groupedSections{
+            if groupedViewModel.sectionName == newItem.group{
+                groupedViewModel.viewModels.append(newItem)
+                found = true
+            }
+        }
+        
+        if !found{
+            groupedSections.append(GroupedDiaryViewModel(sectionName: newItem.group, viewModels: [newItem]))
+        }
+        
+        self.sortData()
+        self.collectionView.reloadData()
+        self.galleryCollectionView.reloadData()
+        self.classicTableView.reloadData()
+    }
+    
+
 }
