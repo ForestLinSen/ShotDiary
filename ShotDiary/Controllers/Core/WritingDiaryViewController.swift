@@ -230,12 +230,19 @@ class WritingDiaryViewController: UIViewController {
 
                 strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
                 strongSelf.titleEditor.text = nil
+                strongSelf.titleEditor.placeholder = "Untitled"
                 strongSelf.videoURL = nil
                 strongSelf.fileName = nil
-                strongSelf.textEditor.text = nil
+                strongSelf.textEditor.text = "How are you today?"
+                strongSelf.textEditor.textColor = K.mainNavy
                 strongSelf.player?.pause()
                 strongSelf.player = nil
                 strongSelf.playerLayer?.removeFromSuperlayer()
+                
+                strongSelf.cancelButton.removeFromSuperview()
+                strongSelf.playerViewController.view.removeFromSuperview()
+                strongSelf.playerViewController.player?.pause()
+                strongSelf.playerViewController.player = nil
             }
             
             

@@ -18,12 +18,28 @@ class Helper{
         return dateString
     }
     
+    // https://www.zerotoappstore.com/get-year-month-day-from-date-swift.html
     static func formatDate(date: Date) -> String{
         let dateFormatter = DateFormatter()
         dateFormatter.locale = .current
         dateFormatter.timeZone = .current
-        dateFormatter.dateStyle = .long
-        dateFormatter.timeStyle = .short
+        dateFormatter.dateFormat = "EEEE, MMMM d, yyyy "
+        return dateFormatter.string(from: date)
+    }
+    
+    static func formateCollectionDate(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .current
+        dateFormatter.timeZone = .current
+        dateFormatter.dateFormat = "MMMM yyyy"
+        return dateFormatter.string(from: date)
+    }
+    
+    static func formateCollectionCellDate(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .current
+        dateFormatter.timeZone = .current
+        dateFormatter.dateFormat = "MMMM d"
         return dateFormatter.string(from: date)
     }
 }

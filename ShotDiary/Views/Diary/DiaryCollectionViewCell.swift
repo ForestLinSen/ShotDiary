@@ -61,7 +61,7 @@ class DiaryCollectionViewCell: UICollectionViewCell {
     func configure(with viewModel: DiaryViewModel){
         previewImage.image = viewModel.getPreviewImage()
         titleLabel.text = viewModel.title
-        dateLabel.text = viewModel.date.description
+        dateLabel.text = viewModel.displayCollectionCellDate
     }
     
     override func prepareForReuse() {

@@ -105,6 +105,10 @@ class DiaryViewController: UIViewController {
         groupedSections.sort(by: { prev, next in
             return (prev.viewModels.first?.date ?? Date()) > (next.viewModels.first?.date ?? Date())
         })
+        
+        groupedSections.forEach{ $0.viewModels.sort { prev, next in
+            prev.date > next.date
+        }}
     }
     
     
@@ -261,7 +265,7 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
             return UICollectionReusableView()
         }
         
-        cell.configure(with: groupedSections[indexPath.section].sectionName)
+        cell.configure(with: groupedSections[indexPath.section].displayedSectionName ?? "Unknown")
         
         return cell
 

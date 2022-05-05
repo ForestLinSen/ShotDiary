@@ -71,7 +71,7 @@ class ClassicDiaryTableViewCell: UITableViewCell{
         
         previewImageView.frame = CGRect(x: padding, y: imageYPos, width: imageSize, height: imageSize)
         titleLabel.frame = CGRect(x: imageSize+padding*2, y: imageYPos, width: frame.width-imageSize-padding*3, height: titleHeight)
-        dateLabel.frame = CGRect(x: imageSize+padding*2, y: imageYPos+titleHeight, width: 100, height: titleHeight)
+        dateLabel.frame = CGRect(x: imageSize+padding*2, y: imageYPos+titleHeight, width: 200, height: titleHeight)
         contentPreviewLabel.frame = CGRect(x: imageSize+padding*2, y: imageYPos+titleHeight*2,
                                            width: frame.width-imageSize-padding*2, height: frame.height-titleHeight*2-padding*2)
     }
@@ -87,9 +87,8 @@ class ClassicDiaryTableViewCell: UITableViewCell{
     func configure(with viewModel: DiaryViewModel){
         previewImageView.image = viewModel.getPreviewImage()
         titleLabel.text = viewModel.title
-        dateLabel.text = viewModel.date.description
+        dateLabel.text = viewModel.displayDate
         contentPreviewLabel.text = viewModel.content
-//        contentPreviewLabel.text = "When 5-month-old Samoyed puppy Onni returned from a doggie playdate, his owners had quite the clean-up task ahead of them. The dog‘s strikingly white fur was covered in mud from head to paw — well, except for his adorable face, which maintained its color despite the dirt everywhere else."
     }
     
     func loadTestVideo(filePath: URL){

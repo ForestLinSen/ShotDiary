@@ -17,13 +17,18 @@ class DiaryViewModel{
     let month: Int
     let day: Int
     let group: String
-
+    let displayDate: String
+    let displayCollectionCellDate: String
+    let displayCollectionDate: String
     
     init(title: String, content: String, fileURL: String, date: Date){
         self.title = title
         self.content = content
         self.fileURL = fileURL
         self.date = date
+        self.displayDate = Helper.formatDate(date: date)
+        self.displayCollectionDate = Helper.formateCollectionDate(date: date)
+        self.displayCollectionCellDate = Helper.formateCollectionCellDate(date: date)
         
         let dateValue = Calendar.current.dateComponents([.year, .month, .day], from: self.date)
         self.year = dateValue.year!
