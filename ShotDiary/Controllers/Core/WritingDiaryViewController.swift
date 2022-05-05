@@ -27,17 +27,17 @@ class WritingDiaryViewController: UIViewController {
     
     private let titleEditor: UITextField = {
         let titleEditor = UITextField()
-        titleEditor.placeholder = "Untitled"
-        titleEditor.font = .systemFont(ofSize: 30, weight: .semibold)
+        titleEditor.attributedPlaceholder = NSAttributedString(string: "Untitled", attributes: [NSAttributedString.Key.foregroundColor: K.mainNavy])
+        titleEditor.font = .systemFont(ofSize: 30, weight: .bold)
         titleEditor.layer.cornerRadius = 5
-        titleEditor.textColor = .label
+        titleEditor.textColor = K.mainNavy
         return titleEditor
     }()
     
     private let textEditor: UITextView = {
         let textField = UITextView()
         textField.text = "How are you today?"
-        textField.textColor = .secondaryLabel
+        textField.textColor = K.mainNavy
         textField.backgroundColor = nil
         textField.font = .systemFont(ofSize: 16, weight: .regular)
         return textField
@@ -50,22 +50,31 @@ class WritingDiaryViewController: UIViewController {
         button.contentHorizontalAlignment = .fill
         button.imageView?.contentMode = .scaleAspectFit
         button.imageView?.clipsToBounds = true
-        button.tintColor = .secondaryLabel
+        button.tintColor = .white
         return button
+    }()
+    
+    private let videoFrame: UIView = {
+        let view = UIView()
+        view.layer.cornerRadius = 12
+        view.backgroundColor = K.mainNavy
+        return view
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Write a diary"
+        title = "Write"
         
         view.backgroundColor = .systemBackground
         view.addSubview(textEditor)
         view.addSubview(titleEditor)
+        view.addSubview(videoFrame)
         view.addSubview(addVideoButton)
         
         
         textEditor.delegate = self
         textEditor.pasteDelegate = self
+        titleEditor.delegate = self
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapPostButton))
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapPostButton))
@@ -82,28 +91,38 @@ class WritingDiaryViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
+
         let editorWidth = view.frame.width*0.75
         let titleHeight = min(view.frame.height/20, 200)
         let leftPadding = (view.frame.width-editorWidth)/2
         let padding = CGFloat(20)
         let buttonSize = CGFloat(60)
         
-        titleEditor.frame = CGRect(x: leftPadding, y: view.safeAreaInsets.bottom+padding*2,
-                                   width: editorWidth, height: titleHeight)
-        textEditor.frame = CGRect(x: leftPadding, y: view.safeAreaInsets.bottom+titleHeight+padding*3,
-                                  width: editorWidth, height: 250)
-        addVideoButton.frame = CGRect(x: (view.frame.width-buttonSize)/2, y: textEditor.frame.maxY+padding,
+        let playerSize = view.frame.width*0.8
+        videoFrame.frame = CGRect(x: (view.frame.width-playerSize)/2, y: view.safeAreaInsets.bottom + padding, width: playerSize, height: playerSize*0.618)
+
+        addVideoButton.frame = CGRect(x: (view.frame.width-buttonSize)/2,
+                                      y: view.safeAreaInsets.bottom + padding + (videoFrame.frame.height-buttonSize)/2,
                                       width: buttonSize, height: buttonSize)
         
+        titleEditor.frame = CGRect(x: leftPadding, y: videoFrame.frame.origin.y+videoFrame.frame.height+padding*2,
+                                   width: editorWidth, height: titleHeight)
+        textEditor.frame = CGRect(x: leftPadding, y: titleEditor.frame.origin.y+titleEditor.frame.height+padding,
+                                  width: editorWidth, height: 250)
+        
+        
         let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0, y: titleEditor.frame.height-2, width: titleEditor.frame.width, height: 2.0)
-        bottomLine.backgroundColor = UIColor.secondaryLabel.cgColor
+        bottomLine.frame = CGRect(x: 0, y: titleEditor.frame.height-1, width: titleEditor.frame.width, height: 1.0)
+        bottomLine.backgroundColor = K.mainTextColor.cgColor
         titleEditor.borderStyle = .none
         titleEditor.layer.addSublayer(bottomLine)
         
+        //textEditor.backgroundColor = .systemBlue
+        
     }
     
+    
+    // MARK: - Display chosen video
     func displayChosenVideo(){
         guard let url = videoURL else { return }
         
@@ -119,7 +138,7 @@ class WritingDiaryViewController: UIViewController {
             let playerSize = (self?.view.frame.width)!*0.8
             
             self?.view.addSubview((self?.playerViewController.view)!)
-            self?.playerViewController.view.frame = CGRect(x: ((self?.view.frame.width)!-playerSize)/2, y: (self?.addVideoButton.frame.origin.y)!, width: playerSize, height: playerSize*0.618)
+            self?.playerViewController.view.frame = (self?.videoFrame.frame)!
             self?.playerViewController.view.layer.cornerRadius = 15
             self?.playerViewController.view.clipsToBounds = true
 
@@ -159,7 +178,7 @@ class WritingDiaryViewController: UIViewController {
             let date1 = Date.parse("2022-01-01")
             let date2 = Date.parse("2022-05-01")
             
-            let viewModel = DiaryViewModel(title: titleEditor.text ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date.randomBetween(start: date1, end: date2))
+            let viewModel = DiaryViewModel(title: (titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text) ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date.randomBetween(start: date1, end: date2))
             
             CoreDataManager.shared.createItems(viewModel: viewModel){[weak self] success in
                 guard let strongSelf = self else { return }
@@ -220,16 +239,16 @@ class WritingDiaryViewController: UIViewController {
 
 extension WritingDiaryViewController: UITextViewDelegate, UITextPasteDelegate{
     func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .secondaryLabel{
+        if textView.textColor == K.mainNavy{
             textView.text = ""
-            textView.textColor = .label
+            textView.textColor = K.mainBlack
         }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.count == 0{
             textView.text = "How are you today?"
-            textView.textColor = .secondaryLabel
+            textView.textColor = K.mainNavy
         }
     }
     
@@ -237,6 +256,18 @@ extension WritingDiaryViewController: UITextViewDelegate, UITextPasteDelegate{
         
         textEditor.replace(textRange, withText: attributedString.string)
         return textRange
+    }
+}
+
+extension WritingDiaryViewController: UITextFieldDelegate{
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.placeholder = ""
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        if textField.text == ""{
+            textField.placeholder = "Untitled"
+        }
     }
 }
 

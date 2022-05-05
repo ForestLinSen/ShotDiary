@@ -32,6 +32,7 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         return label
     }()
     
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(previewImage)

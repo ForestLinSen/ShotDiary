@@ -14,6 +14,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     var window: UIWindow?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+//        let appearance = UINavigationBarAppearance()
+//        appearance.configureWithOpaqueBackground()
+//        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+//        appearance.backgroundColor = K.mainBlueTitleColor
+//        let proxy = UINavigationBar.appearance()
+//        proxy.standardAppearance = appearance
+//        proxy.scrollEdgeAppearance = appearance
+//        
+        
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = HomeViewController()
         window.makeKeyAndVisible()

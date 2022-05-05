@@ -20,6 +20,11 @@ class DiaryViewController: UIViewController {
     
     private let segmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: ["Classic", "Collection", "Gallery"])
+        //let titleTextAttributes = [NSForegroundColorAttributeName: UIColor.white]
+        control.setTitleTextAttributes([.foregroundColor: UIColor.lightText], for: .normal)
+        control.setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        control.backgroundColor = K.mainNavy
+        control.selectedSegmentTintColor = K.mainBlueTitleColor
         control.selectedSegmentIndex = 0
         return control
     }()
@@ -165,8 +170,9 @@ class DiaryViewController: UIViewController {
                                                   
     private func setUpNavBar(){
         let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.systemBackground]
+        navBarAppearance.titleTextAttributes = [.foregroundColor: K.mainNavy]
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
     }
     
     private func setUpScrollView(){
