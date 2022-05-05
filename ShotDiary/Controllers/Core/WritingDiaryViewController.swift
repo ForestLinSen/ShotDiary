@@ -61,6 +61,16 @@ class WritingDiaryViewController: UIViewController {
         return view
     }()
     
+    private let cancelButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "xmark.bin.circle.fill"), for: .normal)
+        button.contentVerticalAlignment = .fill
+        button.contentHorizontalAlignment = .fill
+        button.imageView?.contentMode = .scaleAspectFit
+        button.tintColor = .lightGray
+        return button
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Write"
@@ -72,21 +82,16 @@ class WritingDiaryViewController: UIViewController {
         view.addSubview(addVideoButton)
         
         
+        
         textEditor.delegate = self
         textEditor.pasteDelegate = self
         titleEditor.delegate = self
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapPostButton))
-        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapPostButton))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Post", style: .done, target: self, action: #selector(didTapPostButton))
         
         addVideoButton.addTarget(self, action: #selector(didTapAddVideoButton), for: .touchUpInside)
-        
         displayChosenVideo()
-        
-        CoreDataManager.shared.getAllItems { viewModels in
-            
-        }
-        
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -105,10 +110,12 @@ class WritingDiaryViewController: UIViewController {
                                       y: view.safeAreaInsets.bottom + padding + (videoFrame.frame.height-buttonSize)/2,
                                       width: buttonSize, height: buttonSize)
         
-        titleEditor.frame = CGRect(x: leftPadding, y: videoFrame.frame.origin.y+videoFrame.frame.height+padding*2,
+
+        
+        titleEditor.frame = CGRect(x: leftPadding, y: videoFrame.frame.origin.y+videoFrame.frame.height+padding*3.5,
                                    width: editorWidth, height: titleHeight)
         textEditor.frame = CGRect(x: leftPadding, y: titleEditor.frame.origin.y+titleEditor.frame.height+padding,
-                                  width: editorWidth, height: 250)
+                                  width: editorWidth, height: 140)
         
         
         let bottomLine = CALayer()
@@ -128,25 +135,58 @@ class WritingDiaryViewController: UIViewController {
         
         DispatchQueue.main.async {[weak self] in
             //let videoURL = URL(string: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4")
-            //guard let url = Bundle.main.url(forResource: "video", withExtension: "mp4") else { return }
-            //print("Debug: peaky blidner url -> \(url)")
-            print("Debug: video url \(url)")
-            self?.player = AVPlayer(url: url)
-            self?.playerLayer = AVPlayerLayer(player: self?.player)
-            self?.playerViewController.player = AVPlayer(url: url)
-            
-            let playerSize = (self?.view.frame.width)!*0.8
-            
-            self?.view.addSubview((self?.playerViewController.view)!)
-            self?.playerViewController.view.frame = (self?.videoFrame.frame)!
-            self?.playerViewController.view.layer.cornerRadius = 15
-            self?.playerViewController.view.clipsToBounds = true
 
+            guard let strongSelf = self else { return }
+            
+            strongSelf.player = AVPlayer(url: url)
+            strongSelf.playerLayer = AVPlayerLayer(player: self?.player)
+            strongSelf.playerViewController.player = AVPlayer(url: url)
+
+            strongSelf.view.addSubview((self?.playerViewController.view)!)
+            strongSelf.playerViewController.view.frame = (self?.videoFrame.frame)!
+            strongSelf.playerViewController.view.layer.cornerRadius = 15
+            strongSelf.playerViewController.view.clipsToBounds = true
+
+            let buttonSize = CGFloat(40)
+            strongSelf.view.addSubview(strongSelf.cancelButton)
+            strongSelf.cancelButton.frame = CGRect(x: (strongSelf.view.frame.width-buttonSize)/2,
+                                                   y: strongSelf.videoFrame.frame.origin.y + strongSelf.videoFrame.frame.height + 10,
+                                        width: buttonSize,
+                                        height: buttonSize)
+            strongSelf.cancelButton.addTarget(self, action: #selector(strongSelf.discardCurrentVideo), for: .touchUpInside)
         }
  
     }
     
     //MARK: - Button functions
+    @objc func discardCurrentVideo(){
+        let alert = UIAlertController(title: "Confirm", message: "Do you want to remove the current video?", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Confirm", style: .destructive, handler: {[weak self] _ in
+            self?.removeCurrentVideo()
+        }))
+        
+        present(alert, animated: true)
+    }
+    
+    func removeCurrentVideo(){
+        cancelButton.removeFromSuperview()
+        playerViewController.view.removeFromSuperview()
+        playerViewController.player?.pause()
+        playerViewController.player = nil
+        
+        let fileManager = FileManager.default
+        if let url = videoURL, fileManager.fileExists(atPath: url.path){
+            do{
+                try fileManager.removeItem(at: url)
+                videoURL = nil
+                print("Debug: video URL removed")
+            }catch{
+                print("Debug: cannot remove given ")
+            }
+        }
+    }
+    
     
     @objc func didTapPostButton(){
         let currentPath = FileManager.default.currentDirectoryPath

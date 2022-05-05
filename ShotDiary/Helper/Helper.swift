@@ -17,6 +17,15 @@ class Helper{
         let dateString = "\(dateValue.year!)_\(dateValue.month!)_\(dateValue.day!)"
         return dateString
     }
+    
+    static func formatDate(date: Date) -> String{
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = .current
+        dateFormatter.timeZone = .current
+        dateFormatter.dateStyle = .long
+        dateFormatter.timeStyle = .short
+        return dateFormatter.string(from: date)
+    }
 }
 
 

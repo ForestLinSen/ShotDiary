@@ -13,14 +13,10 @@ class HomeViewController: UITabBarController {
         super.viewDidLoad()
         
         let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = K.mainNavy
-        appearance.selectionIndicatorTintColor = .white
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
         tabBar.tintColor = .white
-        tabBar.unselectedItemTintColor = .systemBlue
-
         
         let diaryVC = DiaryViewController()
         let writingVC = WritingDiaryViewController()

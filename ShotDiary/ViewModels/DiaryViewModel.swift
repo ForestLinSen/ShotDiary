@@ -17,6 +17,7 @@ class DiaryViewModel{
     let month: Int
     let day: Int
     let group: String
+
     
     init(title: String, content: String, fileURL: String, date: Date){
         self.title = title
@@ -30,6 +31,7 @@ class DiaryViewModel{
         self.day = dateValue.day!
         
         self.group = "\(year)_\(month)"
+
     }
     
     func getRelativeFilePath() -> URL{
