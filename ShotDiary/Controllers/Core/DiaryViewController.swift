@@ -288,8 +288,6 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
         }else{
             return diaryViewModels.count
         }
-        
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -316,6 +314,11 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
         }
         
         return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        collectionView.deselectItem(at: indexPath, animated: true)
+        navigationController?.pushViewController(DiaryCellViewController(viewModel: diaryViewModels[indexPath.row]), animated: true)
     }
     
     
