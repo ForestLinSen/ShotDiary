@@ -79,8 +79,12 @@ class DiaryViewController: UIViewController {
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange(_:)), for: .valueChanged)
         
         fetchData()
+        
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.backgroundColor = K.mainBlack
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
     }
-    
     
     private func fetchData(){
         CoreDataManager.shared.getAllItems {[weak self] viewModels in
@@ -115,6 +119,9 @@ class DiaryViewController: UIViewController {
     @objc func segmentedControlDidChange(_ sender: UISegmentedControl){
         UIView.animate(withDuration: 0.4) {
             self.scrollView.contentOffset.x = CGFloat(sender.selectedSegmentIndex)*self.view.frame.width
+            if self.scrollView.contentOffset.x < self.view.frame.width*2 && self.navigationItem.searchController == nil{
+                self.navigationItem.searchController = self.searchView
+            }
         }
 
     }
@@ -238,12 +245,15 @@ extension DiaryViewController: UITableViewDelegate, UITableViewDataSource{
         cell.configure(with: diaryViewModels[indexPath.row])
         cell.loadTestVideo(filePath: URL(string: diaryViewModels[indexPath.row].fileURL)!)
         return cell
-        
-        
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        navigationController?.pushViewController(DiaryCellViewController(viewModel: diaryViewModels[indexPath.row]), animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 140
+        return 120
     }
 }
 
@@ -319,14 +329,21 @@ extension DiaryViewController: UIScrollViewDelegate{
 
         if offset > view.frame.width*0.6{
             segmentedControl.selectedSegmentIndex = 1
+            if navigationItem.searchController == nil{
+                navigationItem.searchController = searchView
+            }
         }
         
         if offset > view.frame.width*1.6{
             segmentedControl.selectedSegmentIndex = 2
+            navigationItem.searchController = nil
         }
         
         if offset < view.frame.width*0.6 && offset > 1{
             segmentedControl.selectedSegmentIndex = 0
+            if navigationItem.searchController == nil{
+                navigationItem.searchController = searchView
+            }
         }
     }
 }

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B9068CD328242BDC002B244A /* DiaryCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9068CD228242BDC002B244A /* DiaryCellViewController.swift */; };
 		B9323C0F2822AD3900E25F24 /* GroupedDiaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9323C0E2822AD3900E25F24 /* GroupedDiaryViewModel.swift */; };
 		B933994E2820EEAA00F779C0 /* ShotDiary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B933994C2820EEAA00F779C0 /* ShotDiary.xcdatamodeld */; };
 		B962D875282142A300CF8B63 /* K.swift in Sources */ = {isa = PBXBuildFile; fileRef = B962D874282142A300CF8B63 /* K.swift */; };
@@ -33,6 +34,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B9068CD228242BDC002B244A /* DiaryCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryCellViewController.swift; sourceTree = "<group>"; };
 		B9323C0E2822AD3900E25F24 /* GroupedDiaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedDiaryViewModel.swift; sourceTree = "<group>"; };
 		B933994D2820EEAA00F779C0 /* DiaryDataModel.xcdatamodel */ = {isa = PBXFileReference; explicitFileType = wrapper.xcdatamodel; path = DiaryDataModel.xcdatamodel; sourceTree = "<group>"; };
 		B962D874282142A300CF8B63 /* K.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = K.swift; sourceTree = "<group>"; };
@@ -71,9 +73,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B9068CD128242BC3002B244A /* Diary */ = {
+			isa = PBXGroup;
+			children = (
+				B9068CD228242BDC002B244A /* DiaryCellViewController.swift */,
+			);
+			path = Diary;
+			sourceTree = "<group>";
+		};
 		B933994F2820EF2600F779C0 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				B9068CD128242BC3002B244A /* Diary */,
 				B93399502820EF3700F779C0 /* Core */,
 			);
 			path = Controllers;
@@ -258,6 +269,7 @@
 				B962D87728216B7400CF8B63 /* Helper.swift in Sources */,
 				B9B8621B281FE506004D1B75 /* DiaryViewController.swift in Sources */,
 				B962D87A28218E0D00CF8B63 /* Diary+CoreDataClass.swift in Sources */,
+				B9068CD328242BDC002B244A /* DiaryCellViewController.swift in Sources */,
 				B962D87E28218FB200CF8B63 /* CoreDataManager.swift in Sources */,
 				B9B8621D281FE531004D1B75 /* WritingDiaryViewController.swift in Sources */,
 				B962D881282190D000CF8B63 /* DiaryViewModel.swift in Sources */,

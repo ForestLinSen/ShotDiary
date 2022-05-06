@@ -9,6 +9,14 @@ import UIKit
 
 class HomeViewController: UITabBarController {
 
+    
+//    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+//        diaryVC = DiaryViewController()
+//        nav1 = UINavigationController(rootViewController: diaryVC)
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -24,6 +32,8 @@ class HomeViewController: UITabBarController {
         writingVC.delegate = diaryVC
 
         let nav1 = UINavigationController(rootViewController: diaryVC)
+        nav1.navigationBar.barStyle = .black
+        
         let nav2 = UINavigationController(rootViewController: writingVC)
         let nav3 = UINavigationController(rootViewController: settingsVC)
         

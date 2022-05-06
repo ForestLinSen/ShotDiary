@@ -71,6 +71,24 @@ class WritingDiaryViewController: UIViewController {
         return button
     }()
     
+    private let rightBarButton: UIButton = {
+        let rightBarButton = UIButton()
+        rightBarButton.frame = CGRect(x: 0, y: 0, width: 64, height: 34)
+
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = K.mainOrange
+        config.title = "Post"
+        config.cornerStyle = .medium
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incomming in
+            var outgoing = incomming
+            outgoing.font = .systemFont(ofSize: 14, weight: .semibold)
+            return outgoing
+        })
+        rightBarButton.configuration = config
+        
+        return rightBarButton
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Write"
@@ -87,7 +105,11 @@ class WritingDiaryViewController: UIViewController {
         textEditor.pasteDelegate = self
         titleEditor.delegate = self
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Post", style: .done, target: self, action: #selector(didTapPostButton))
+        
+        
+        rightBarButton.addTarget(self, action: #selector(didTapPostButton), for: .touchUpInside)
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBarButton)
         
         addVideoButton.addTarget(self, action: #selector(didTapAddVideoButton), for: .touchUpInside)
         displayChosenVideo()
@@ -103,8 +125,8 @@ class WritingDiaryViewController: UIViewController {
         let padding = CGFloat(20)
         let buttonSize = CGFloat(60)
         
-        let playerSize = view.frame.width*0.8
-        videoFrame.frame = CGRect(x: (view.frame.width-playerSize)/2, y: view.safeAreaInsets.bottom + padding, width: playerSize, height: playerSize*0.618)
+        let playerSize = view.frame.width*0.38
+        videoFrame.frame = CGRect(x: (view.frame.width-playerSize)/2, y: view.safeAreaInsets.bottom + padding, width: playerSize, height: playerSize/0.618)
 
         addVideoButton.frame = CGRect(x: (view.frame.width-buttonSize)/2,
                                       y: view.safeAreaInsets.bottom + padding + (videoFrame.frame.height-buttonSize)/2,
@@ -115,7 +137,7 @@ class WritingDiaryViewController: UIViewController {
         titleEditor.frame = CGRect(x: leftPadding, y: videoFrame.frame.origin.y+videoFrame.frame.height+padding*3.5,
                                    width: editorWidth, height: titleHeight)
         textEditor.frame = CGRect(x: leftPadding, y: titleEditor.frame.origin.y+titleEditor.frame.height+padding,
-                                  width: editorWidth, height: 140)
+                                  width: editorWidth, height: 100)
         
         
         let bottomLine = CALayer()
@@ -141,6 +163,7 @@ class WritingDiaryViewController: UIViewController {
             strongSelf.player = AVPlayer(url: url)
             strongSelf.playerLayer = AVPlayerLayer(player: self?.player)
             strongSelf.playerViewController.player = AVPlayer(url: url)
+            strongSelf.playerViewController.videoGravity = .resizeAspectFill
 
             strongSelf.view.addSubview((self?.playerViewController.view)!)
             strongSelf.playerViewController.view.frame = (self?.videoFrame.frame)!
