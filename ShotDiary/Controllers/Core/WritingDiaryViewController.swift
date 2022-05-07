@@ -98,21 +98,19 @@ class WritingDiaryViewController: UIViewController {
         view.addSubview(titleEditor)
         view.addSubview(videoFrame)
         view.addSubview(addVideoButton)
-        
-        
-        
+
         textEditor.delegate = self
         textEditor.pasteDelegate = self
         titleEditor.delegate = self
-        
-        
-        
+ 
         rightBarButton.addTarget(self, action: #selector(didTapPostButton), for: .touchUpInside)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBarButton)
         
         addVideoButton.addTarget(self, action: #selector(didTapAddVideoButton), for: .touchUpInside)
         displayChosenVideo()
+        
+        //APIManager.shared.getPopularVideo()
 
     }
     
@@ -283,12 +281,13 @@ class WritingDiaryViewController: UIViewController {
     }
 
     @objc func didTapAddVideoButton(){
-        let actionsheet = UIAlertController(title: "Choose a Video", message: "Choose a video from your library or take a video", preferredStyle: .actionSheet)
-        actionsheet.addAction(UIAlertAction(title: "Video Library", style: .default, handler: {[weak self] _ in
+        let actionsheet = UIAlertController(title: "Choose a Video", message: "Choose a video from your library or search videos online", preferredStyle: .actionSheet)
+        actionsheet.addAction(UIAlertAction(title: "Your Video Library", style: .default, handler: {[weak self] _ in
             self?.presentVideoPicker()
         }))
-        actionsheet.addAction(UIAlertAction(title: "Take a Video", style: .default, handler: { _ in
-            
+        actionsheet.addAction(UIAlertAction(title: "Search Pexels Videos", style: .default, handler: {[weak self] _ in
+            let vc = SearchVideosViewController()
+            self?.present(vc, animated: true)
         }))
         actionsheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(actionsheet, animated: true)
