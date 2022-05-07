@@ -110,7 +110,7 @@ class WritingDiaryViewController: UIViewController {
         addVideoButton.addTarget(self, action: #selector(didTapAddVideoButton), for: .touchUpInside)
         displayChosenVideo()
         
-        //APIManager.shared.getPopularVideo()
+        
 
     }
     
@@ -286,7 +286,7 @@ class WritingDiaryViewController: UIViewController {
             self?.presentVideoPicker()
         }))
         actionsheet.addAction(UIAlertAction(title: "Search Pexels Videos", style: .default, handler: {[weak self] _ in
-            let vc = SearchVideosViewController()
+            let vc = UINavigationController(rootViewController: SearchVideosViewController())
             self?.present(vc, animated: true)
         }))
         actionsheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))

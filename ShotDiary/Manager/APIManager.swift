@@ -13,7 +13,7 @@ final class APIManager{
     let token = "563492ad6f9170000100000138010ac153c84f60875468bd45698f56"
     let baseURL = "https://api.pexels.com/videos"
     
-    func getPopularVideo(){
+    func getPopularVideo(completion: @escaping (Result<VideosResponse, Error>) -> Void){
 
         guard let url = URL(string: baseURL+"/popular") else { return }
         var request = URLRequest(url: url)
@@ -26,10 +26,15 @@ final class APIManager{
             }
             
             do{
-                let jsonData = try JSONSerialization.jsonObject(with: data)
-                print("Debug: fetched data: \(jsonData)")
+                let jsonData = try JSONDecoder().decode(VideosResponse.self, from: data)
+                // print("Debug: fetched data: \(jsonData)")
+                // print("Debug: number of responses: \(jsonData.videos.count)")
+                
+                completion(.success(jsonData))
+                
             }catch{
-                print("Debug: cannot decode data from pexels")
+                completion(.failure(error))
+                print("Debug: cannot decode data from pexels \(error)")
             }
             
         }.resume()
