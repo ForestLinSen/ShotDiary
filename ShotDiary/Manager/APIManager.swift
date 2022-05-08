@@ -27,9 +27,6 @@ final class APIManager{
             
             do{
                 let jsonData = try JSONDecoder().decode(VideosResponse.self, from: data)
-                // print("Debug: fetched data: \(jsonData)")
-                // print("Debug: number of responses: \(jsonData.videos.count)")
-                
                 completion(.success(jsonData))
                 
             }catch{

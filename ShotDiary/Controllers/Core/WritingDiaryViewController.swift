@@ -224,52 +224,61 @@ class WritingDiaryViewController: UIViewController {
         let folderURL = getFolderURL()
         let folderExists = (try? folderURL.checkResourceIsReachable()) ?? false
         
-        do{
-            if !folderExists{
-                try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: false)
-            }
+       
+        if fileName == nil {
+            // Video from Pexels
             
-            guard fileName != nil else { return }
-            let fileURL = folderURL.appendingPathComponent(fileName!)
-            let data = try Data(contentsOf: videoURL!)
-            try data.write(to: fileURL)
+        }else{
+            // Video from User Library
             
-            
-            // FOR TEST
-            let date1 = Date.parse("2022-01-01")
-            let date2 = Date.parse("2022-05-01")
-            
-            let viewModel = DiaryViewModel(title: (titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text) ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date.randomBetween(start: date1, end: date2))
-            
-            CoreDataManager.shared.createItems(viewModel: viewModel){[weak self] success in
-                guard let strongSelf = self else { return }
-                print("Debug: create item status -> \(fileURL)")
-                
-                UIView.animate(withDuration: 0.2) {
-                    strongSelf.tabBarController?.selectedIndex = 0
+            do{
+                if !folderExists{
+                    try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: false)
                 }
-
-                strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
-                strongSelf.titleEditor.text = nil
-                strongSelf.titleEditor.placeholder = "Untitled"
-                strongSelf.videoURL = nil
-                strongSelf.fileName = nil
-                strongSelf.textEditor.text = "How are you today?"
-                strongSelf.textEditor.textColor = K.mainNavy
-                strongSelf.player?.pause()
-                strongSelf.player = nil
-                strongSelf.playerLayer?.removeFromSuperlayer()
                 
-                strongSelf.cancelButton.removeFromSuperview()
-                strongSelf.playerViewController.view.removeFromSuperview()
-                strongSelf.playerViewController.player?.pause()
-                strongSelf.playerViewController.player = nil
+                guard fileName != nil else { return }
+                let fileURL = folderURL.appendingPathComponent(fileName!)
+                let data = try Data(contentsOf: videoURL!)
+                try data.write(to: fileURL)
+                
+                
+                // FOR TEST
+                let date1 = Date.parse("2022-01-01")
+                let date2 = Date.parse("2022-05-01")
+                
+                let viewModel = DiaryViewModel(title: (titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text) ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date.randomBetween(start: date1, end: date2))
+                
+                CoreDataManager.shared.createItems(viewModel: viewModel){[weak self] success in
+                    guard let strongSelf = self else { return }
+                    print("Debug: create item status -> \(fileURL)")
+                    
+                    UIView.animate(withDuration: 0.2) {
+                        strongSelf.tabBarController?.selectedIndex = 0
+                    }
+
+                    strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
+                    strongSelf.titleEditor.text = nil
+                    strongSelf.titleEditor.placeholder = "Untitled"
+                    strongSelf.videoURL = nil
+                    strongSelf.fileName = nil
+                    strongSelf.textEditor.text = "How are you today?"
+                    strongSelf.textEditor.textColor = K.mainNavy
+                    strongSelf.player?.pause()
+                    strongSelf.player = nil
+                    strongSelf.playerLayer?.removeFromSuperlayer()
+                    
+                    strongSelf.cancelButton.removeFromSuperview()
+                    strongSelf.playerViewController.view.removeFromSuperview()
+                    strongSelf.playerViewController.player?.pause()
+                    strongSelf.playerViewController.player = nil
+                }
+                
+                
+            }catch{
+                print("Debug: something wrong \(error)")
             }
-            
-            
-        }catch{
-            print("Debug: something wrong \(error)")
         }
+
     }
     
     private func getFolderURL() -> URL{
@@ -286,8 +295,10 @@ class WritingDiaryViewController: UIViewController {
             self?.presentVideoPicker()
         }))
         actionsheet.addAction(UIAlertAction(title: "Search Pexels Videos", style: .default, handler: {[weak self] _ in
-            let vc = UINavigationController(rootViewController: SearchVideosViewController())
-            self?.present(vc, animated: true)
+            let vc = SearchVideosViewController()
+            vc.delegate = self
+            let nav = UINavigationController(rootViewController: vc)
+            self?.present(nav, animated: true)
         }))
         actionsheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(actionsheet, animated: true)
@@ -372,5 +383,14 @@ extension WritingDiaryViewController: PHPickerViewControllerDelegate{
             }
         })
         
+    }
+}
+
+
+// MARK: - Search video delegate
+extension WritingDiaryViewController: SearchVideoViewControllerDelegate{
+    func searchVideoViewController(_ controller: SearchVideosViewController, video: SearchVideoViewModel) {
+        videoURL = video.videoURL
+        displayChosenVideo()
     }
 }

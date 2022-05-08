@@ -7,9 +7,14 @@
 
 import UIKit
 
+protocol SearchVideoViewControllerDelegate: UIViewController{
+    func searchVideoViewController(_ controller: SearchVideosViewController, video: SearchVideoViewModel)
+}
+
 class SearchVideosViewController: UIViewController {
     
     private var viewModels = [SearchVideoViewModel]()
+    weak var delegate: SearchVideoViewControllerDelegate?
     
     private let searchViewController: UISearchController = {
         let resultsVC = SearchResultsViewController()
@@ -90,8 +95,17 @@ extension SearchVideosViewController: UICollectionViewDelegate, UICollectionView
         
         let viewModel = viewModels[indexPath.row]
         cell.configure(with: viewModel)
+        cell.delegate = self
         return cell
     }
     
     
+}
+
+
+extension SearchVideosViewController: SearchVideoCollectionViewCellDelegate{
+    func searchVideoCollectionViewCell(_ cell: SearchVideoCollectionViewCell, didChooseVideo video: SearchVideoViewModel) {
+        self.delegate?.searchVideoViewController(self, video: video)
+        self.dismiss(animated: true)
+    }
 }
