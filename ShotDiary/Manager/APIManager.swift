@@ -36,4 +36,22 @@ final class APIManager{
             
         }.resume()
     }
+    
+    func downloadOnlineVideo(from url: URL, fileURL: URL, completion: @escaping (Bool) -> Void){
+  
+        URLSession.shared.dataTask(with: url) { data, _, error in
+            guard let data = data, error == nil else {
+                print("Debug: an error occured when downloading video \(error)")
+                return
+            }
+            
+            do{
+                try data.write(to: fileURL)
+                completion(true)
+            }catch{
+                print("Debug: an error occured when writing video \(error)")
+            }
+
+        }.resume()
+    }
 }
