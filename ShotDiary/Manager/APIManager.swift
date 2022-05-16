@@ -41,7 +41,7 @@ final class APIManager{
   
         URLSession.shared.dataTask(with: url) { data, _, error in
             guard let data = data, error == nil else {
-                print("Debug: an error occured when downloading video \(error)")
+                print("Debug: an error occured when downloading video \(String(describing: error))")
                 return
             }
             

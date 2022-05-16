@@ -36,6 +36,7 @@
 		B9B8622A282027C9004D1B75 /* PageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B86229282027C8004D1B75 /* PageKind.swift */; };
 		B9B8622C28203057004D1B75 /* DiaryCollectionViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */; };
 		B9B8622E28204709004D1B75 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622D28204709004D1B75 /* GalleryCollectionViewCell.swift */; };
+		B9E59DCD283201E400F39850 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B9E59DCC283201E400F39850 /* IQKeyboardManagerSwift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +78,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B9E59DCD283201E400F39850 /* IQKeyboardManagerSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -264,6 +266,9 @@
 			dependencies = (
 			);
 			name = ShotDiary;
+			packageProductDependencies = (
+				B9E59DCC283201E400F39850 /* IQKeyboardManagerSwift */,
+			);
 			productName = ShotDiary;
 			productReference = B9B86203281FE386004D1B75 /* ShotDiary.app */;
 			productType = "com.apple.product-type.application";
@@ -292,6 +297,9 @@
 				Base,
 			);
 			mainGroup = B9B861FA281FE386004D1B75;
+			packageReferences = (
+				B9E59DCB283201E400F39850 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+			);
 			productRefGroup = B9B86204281FE386004D1B75 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -562,6 +570,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B9E59DCB283201E400F39850 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		B9E59DCC283201E400F39850 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9E59DCB283201E400F39850 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		B933994C2820EEAA00F779C0 /* ShotDiary.xcdatamodeld */ = {

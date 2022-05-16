@@ -239,36 +239,25 @@ class WritingDiaryViewController: UIViewController {
                 if success{
                     print("Debug: create item status -> \(fileURL)")
                     
-                    // FOR TEST
-                    let date1 = Date.parse("2022-01-01")
-                    let date2 = Date.parse("2022-05-01")
-                    
-                    let viewModel = DiaryViewModel(title: (strongSelf.titleEditor.text?.count == 0 ? "Untitled" : strongSelf.titleEditor.text) ?? "Untitled", content: strongSelf.textEditor.text ?? "", fileURL: onlineFileName, date: Date.randomBetween(start: date1, end: date2))
-                    
-                    CoreDataManager.shared.createItems(viewModel: viewModel){ success in
+                    DispatchQueue.main.async {
+                        // FOR TEST
+                        let date1 = Date.parse("2022-01-01")
+                        let date2 = Date.parse("2022-05-01")
                         
-                        DispatchQueue.main.async {
-                            UIView.animate(withDuration: 0.2) {
-                                strongSelf.tabBarController?.selectedIndex = 0
-                            }
-                        }
+                        let viewModel = DiaryViewModel(title: (strongSelf.titleEditor.text?.count == 0 ? "Untitled" : strongSelf.titleEditor.text) ?? "Untitled", content: strongSelf.textEditor.text ?? "", fileURL: onlineFileName, date: Date.randomBetween(start: date1, end: date2))
+                        
+                        CoreDataManager.shared.createItems(viewModel: viewModel){ success in
+                                UIView.animate(withDuration: 0.2) {
+                                    strongSelf.tabBarController?.selectedIndex = 0
+                                }
+                            
 
-                        strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
-                        strongSelf.titleEditor.text = nil
-                        strongSelf.titleEditor.placeholder = "Untitled"
-                        strongSelf.videoURL = nil
-                        strongSelf.fileName = nil
-                        strongSelf.textEditor.text = "How are you today?"
-                        strongSelf.textEditor.textColor = K.mainNavy
-                        strongSelf.player?.pause()
-                        strongSelf.player = nil
-                        strongSelf.playerLayer?.removeFromSuperlayer()
-                        
-                        strongSelf.cancelButton.removeFromSuperview()
-                        strongSelf.playerViewController.view.removeFromSuperview()
-                        strongSelf.playerViewController.player?.pause()
-                        strongSelf.playerViewController.player = nil
+                            strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
+                            strongSelf.clearPlayerInfo()
+                        }
                     }
+                    
+                    
                     
                 }
             }
@@ -277,9 +266,6 @@ class WritingDiaryViewController: UIViewController {
             // Video from User Library
             
             do{
-                if !folderExists{
-                    try FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: false)
-                }
                 
                 guard fileName != nil else { return }
                 let fileURL = folderURL.appendingPathComponent(fileName!)
@@ -302,20 +288,7 @@ class WritingDiaryViewController: UIViewController {
                     }
 
                     strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
-                    strongSelf.titleEditor.text = nil
-                    strongSelf.titleEditor.placeholder = "Untitled"
-                    strongSelf.videoURL = nil
-                    strongSelf.fileName = nil
-                    strongSelf.textEditor.text = "How are you today?"
-                    strongSelf.textEditor.textColor = K.mainNavy
-                    strongSelf.player?.pause()
-                    strongSelf.player = nil
-                    strongSelf.playerLayer?.removeFromSuperlayer()
-                    
-                    strongSelf.cancelButton.removeFromSuperview()
-                    strongSelf.playerViewController.view.removeFromSuperview()
-                    strongSelf.playerViewController.player?.pause()
-                    strongSelf.playerViewController.player = nil
+                    strongSelf.clearPlayerInfo()
                 }
                 
                 
@@ -324,6 +297,22 @@ class WritingDiaryViewController: UIViewController {
             }
         }
 
+    }
+    
+    private func clearPlayerInfo(){
+        titleEditor.text = nil
+        titleEditor.placeholder = "Untitled"
+        videoURL = nil
+        fileName = nil
+        textEditor.text = "How are you today?"
+        textEditor.textColor = K.mainNavy
+        player?.pause()
+        player = nil
+        playerLayer?.removeFromSuperlayer()
+        cancelButton.removeFromSuperview()
+        playerViewController.view.removeFromSuperview()
+        playerViewController.player?.pause()
+        playerViewController.player = nil
     }
     
     private func getFolderURL() -> URL{

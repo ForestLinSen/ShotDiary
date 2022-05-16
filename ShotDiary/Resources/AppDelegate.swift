@@ -7,6 +7,7 @@
 
 import UIKit
 import CoreData
+import IQKeyboardManagerSwift
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,19 +16,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         
-//        let appearance = UINavigationBarAppearance()
-//        appearance.configureWithOpaqueBackground()
-//        appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-//        appearance.backgroundColor = K.mainBlueTitleColor
-//        let proxy = UINavigationBar.appearance()
-//        proxy.standardAppearance = appearance
-//        proxy.scrollEdgeAppearance = appearance
-//        
-        
         let window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = HomeViewController()
         window.makeKeyAndVisible()
         self.window = window
+        IQKeyboardManager.shared.enable = true
         return true
     }
 
