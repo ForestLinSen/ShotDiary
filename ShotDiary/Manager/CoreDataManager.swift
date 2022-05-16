@@ -50,7 +50,7 @@ class CoreDataManager{
     
     func updateItem(){}
     
-    func searchItem(with query: String){
+    func searchItem(with query: String) -> [Diary] {
         let fetchRequest = Diary.fetchRequest()
         let predicateTitle = NSPredicate(format: "title CONTAINS[c] %@", query)
         let predicateContent = NSPredicate(format: "content CONTAINS[c] %@", query)
@@ -58,9 +58,10 @@ class CoreDataManager{
         
         do{
             let result = try context.fetch(fetchRequest)
-            print("Debug: search result \(result)")
+            return result
         }catch{
             print("Debug: cannot fetch the data \(error)")
+            return []
         }
     }
 }

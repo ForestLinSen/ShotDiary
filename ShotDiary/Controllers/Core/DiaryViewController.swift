@@ -33,6 +33,8 @@ class DiaryViewController: UIViewController {
         let vc = UISearchController(searchResultsController: DiarySearchResultViewController())
         vc.searchBar.placeholder = "Search your diary..."
         vc.searchBar.backgroundColor = .systemBackground
+        vc.searchBar.searchBarStyle = .minimal
+        
         return vc
     }()
     
@@ -75,6 +77,7 @@ class DiaryViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
              
         searchView.searchBar.delegate = self
+        searchView.searchResultsUpdater = self
         
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange(_:)), for: .valueChanged)
         
@@ -354,7 +357,30 @@ extension DiaryViewController: UIScrollViewDelegate{
 }
 
 
-extension DiaryViewController: UISearchControllerDelegate{
+// MARK: - SearchBarController
+extension DiaryViewController: UISearchControllerDelegate, UISearchResultsUpdating{
+    func updateSearchResults(for searchController: UISearchController) {
+        
+    }
+    
+//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+//        guard let query = searchBar.text, let resultController = searchView.searchResultsController as? DiarySearchResultViewController else {
+//            print("Debug: something wrong querying")
+//            return
+//        }
+//        
+//        resultController.search(content: query)
+//    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        guard let query = searchBar.text, let resultController = searchView.searchResultsController as? DiarySearchResultViewController else {
+            print("Debug: something wrong querying")
+            return
+        }
+        
+        resultController.search(content: query)
+    }
+    
     
 }
 
