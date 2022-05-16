@@ -30,7 +30,7 @@ class DiaryViewController: UIViewController {
     }()
     
     private let searchView: UISearchController = {
-        let vc = UISearchController()
+        let vc = UISearchController(searchResultsController: DiarySearchResultViewController())
         vc.searchBar.placeholder = "Search your diary..."
         vc.searchBar.backgroundColor = .systemBackground
         return vc
@@ -79,6 +79,8 @@ class DiaryViewController: UIViewController {
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange(_:)), for: .valueChanged)
         
         fetchData()
+        
+        CoreDataManager.shared.searchItem(with: "Another")
         
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = K.mainBlack

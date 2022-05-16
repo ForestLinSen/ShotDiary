@@ -8,6 +8,15 @@
         "branch" : "master",
         "revision" : "9ab144a1a6c6ae8dad25840610c072709b15d8b5"
       }
+    },
+    {
+      "identity" : "progresshud",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/relatedcode/ProgressHUD.git",
+      "state" : {
+        "branch" : "master",
+        "revision" : "b88ca85d471894464c1f4dc989f142c97b2b8958"
+      }
     }
   ],
   "version" : 2

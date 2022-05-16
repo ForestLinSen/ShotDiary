@@ -37,6 +37,8 @@
 		B9B8622C28203057004D1B75 /* DiaryCollectionViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */; };
 		B9B8622E28204709004D1B75 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622D28204709004D1B75 /* GalleryCollectionViewCell.swift */; };
 		B9E59DCD283201E400F39850 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B9E59DCC283201E400F39850 /* IQKeyboardManagerSwift */; };
+		B9E59DD0283211B600F39850 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = B9E59DCF283211B600F39850 /* ProgressHUD */; };
+		B9E59DD228323D5800F39850 /* DiarySearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E59DD128323D5800F39850 /* DiarySearchResultViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -71,6 +73,7 @@
 		B9B86229282027C8004D1B75 /* PageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageKind.swift; sourceTree = "<group>"; };
 		B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryCollectionViewHeaderView.swift; sourceTree = "<group>"; };
 		B9B8622D28204709004D1B75 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
+		B9E59DD128323D5800F39850 /* DiarySearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiarySearchResultViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +82,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B9E59DCD283201E400F39850 /* IQKeyboardManagerSwift in Frameworks */,
+				B9E59DD0283211B600F39850 /* ProgressHUD in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				B9068CD228242BDC002B244A /* DiaryCellViewController.swift */,
+				B9E59DD128323D5800F39850 /* DiarySearchResultViewController.swift */,
 			);
 			path = Diary;
 			sourceTree = "<group>";
@@ -268,6 +273,7 @@
 			name = ShotDiary;
 			packageProductDependencies = (
 				B9E59DCC283201E400F39850 /* IQKeyboardManagerSwift */,
+				B9E59DCF283211B600F39850 /* ProgressHUD */,
 			);
 			productName = ShotDiary;
 			productReference = B9B86203281FE386004D1B75 /* ShotDiary.app */;
@@ -299,6 +305,7 @@
 			mainGroup = B9B861FA281FE386004D1B75;
 			packageReferences = (
 				B9E59DCB283201E400F39850 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				B9E59DCE283211B600F39850 /* XCRemoteSwiftPackageReference "ProgressHUD" */,
 			);
 			productRefGroup = B9B86204281FE386004D1B75 /* Products */;
 			projectDirPath = "";
@@ -331,6 +338,7 @@
 				B980CE842826D40000244C4A /* SearchResultsViewController.swift in Sources */,
 				B962D87728216B7400CF8B63 /* Helper.swift in Sources */,
 				B9B8621B281FE506004D1B75 /* DiaryViewController.swift in Sources */,
+				B9E59DD228323D5800F39850 /* DiarySearchResultViewController.swift in Sources */,
 				B962D87A28218E0D00CF8B63 /* Diary+CoreDataClass.swift in Sources */,
 				B9068CD328242BDC002B244A /* DiaryCellViewController.swift in Sources */,
 				B980CE8A2826DCBE00244C4A /* SearchVideoViewModel.swift in Sources */,
@@ -580,6 +588,14 @@
 				kind = branch;
 			};
 		};
+		B9E59DCE283211B600F39850 /* XCRemoteSwiftPackageReference "ProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/relatedcode/ProgressHUD.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -587,6 +603,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = B9E59DCB283201E400F39850 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
 			productName = IQKeyboardManagerSwift;
+		};
+		B9E59DCF283211B600F39850 /* ProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B9E59DCE283211B600F39850 /* XCRemoteSwiftPackageReference "ProgressHUD" */;
+			productName = ProgressHUD;
 		};
 /* End XCSwiftPackageProductDependency section */
 

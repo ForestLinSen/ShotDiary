@@ -49,4 +49,18 @@ class CoreDataManager{
     func deleteItem(){}
     
     func updateItem(){}
+    
+    func searchItem(with query: String){
+        let fetchRequest = Diary.fetchRequest()
+        let predicateTitle = NSPredicate(format: "title CONTAINS[c] %@", query)
+        let predicateContent = NSPredicate(format: "content CONTAINS[c] %@", query)
+        fetchRequest.predicate = NSCompoundPredicate.init(type: .or, subpredicates: [predicateTitle, predicateContent])
+        
+        do{
+            let result = try context.fetch(fetchRequest)
+            print("Debug: search result \(result)")
+        }catch{
+            print("Debug: cannot fetch the data \(error)")
+        }
+    }
 }

@@ -10,6 +10,7 @@ import Photos
 import PhotosUI
 import AVFoundation
 import AVKit
+import ProgressHUD
 
 
 protocol WritingDiaryViewControllerDelegate: UIViewController{
@@ -109,22 +110,19 @@ class WritingDiaryViewController: UIViewController {
         
         addVideoButton.addTarget(self, action: #selector(didTapAddVideoButton), for: .touchUpInside)
         displayChosenVideo()
-        
-        
-
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
 
         let editorWidth = view.frame.width*0.75
-        let titleHeight = min(view.frame.height/20, 200)
+        let titleHeight = min(view.frame.height/15, 350)
         let leftPadding = (view.frame.width-editorWidth)/2
         let padding = CGFloat(20)
-        let buttonSize = CGFloat(60)
+        let buttonSize = CGFloat(45)
         
         let playerSize = view.frame.width*0.38
-        videoFrame.frame = CGRect(x: (view.frame.width-playerSize)/2, y: view.safeAreaInsets.bottom + padding, width: playerSize, height: playerSize/0.618)
+        videoFrame.frame = CGRect(x: (view.frame.width-playerSize)/2, y: view.safeAreaInsets.bottom + padding, width: playerSize, height: playerSize)
 
         addVideoButton.frame = CGRect(x: (view.frame.width-buttonSize)/2,
                                       y: view.safeAreaInsets.bottom + padding + (videoFrame.frame.height-buttonSize)/2,
@@ -233,7 +231,7 @@ class WritingDiaryViewController: UIViewController {
             print("Debug: begin to download file")
             let onlineFileName = Helper.generateVideoFileName()
             let fileURL = folderURL.appendingPathComponent(onlineFileName)
-            
+            ProgressHUD.show("Uploading...")
             APIManager.shared.downloadOnlineVideo(from: videoURL!, fileURL: fileURL) {[weak self] success in
                 guard let strongSelf = self else { return }
                 if success{
@@ -254,6 +252,7 @@ class WritingDiaryViewController: UIViewController {
 
                             strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
                             strongSelf.clearPlayerInfo()
+                            ProgressHUD.dismiss()
                         }
                     }
                     
@@ -264,7 +263,7 @@ class WritingDiaryViewController: UIViewController {
             
         }else{
             // Video from User Library
-            
+            ProgressHUD.show("Uploading...")
             do{
                 
                 guard fileName != nil else { return }
@@ -289,6 +288,7 @@ class WritingDiaryViewController: UIViewController {
 
                     strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
                     strongSelf.clearPlayerInfo()
+                    ProgressHUD.dismiss()
                 }
                 
                 
