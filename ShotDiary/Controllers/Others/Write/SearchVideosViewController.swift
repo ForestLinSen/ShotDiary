@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import ProgressHUD
 
 protocol SearchVideoViewControllerDelegate: UIViewController{
     func searchVideoViewController(_ controller: SearchVideosViewController, video: SearchVideoViewModel)
@@ -31,12 +32,17 @@ class SearchVideosViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .systemBackground
         navigationItem.searchController = searchViewController
+        searchViewController.searchBar.delegate = self
+        searchViewController.searchResultsUpdater = self
+        
+        let resultsVC = searchViewController.searchResultsController as! SearchResultsViewController
+        resultsVC.delegate = self
         
         configureCollectionView()
         
-        APIManager.shared.getPopularVideo {[weak self] result in
+        ProgressHUD.show("Loading popular videos...")
+        APIManager.shared.getPopularVideos {[weak self] result in
             switch result{
-                
             case .success(let response):
                 response.videos.forEach { video in
                     if let videoUrl = URL(string: video.video_files.first?.link ?? ""), let previewURL = URL(string: video.image){
@@ -51,6 +57,8 @@ class SearchVideosViewController: UIViewController {
             case .failure(_):
                 break
             }
+            
+            ProgressHUD.dismiss()
         }
     }
     
@@ -98,12 +106,35 @@ extension SearchVideosViewController: UICollectionViewDelegate, UICollectionView
         cell.delegate = self
         return cell
     }
+}
+
+
+extension SearchVideosViewController: UISearchBarDelegate, UISearchResultsUpdating{
+    func updateSearchResults(for searchController: UISearchController) {
+        
+    }
     
-    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let query = searchBar.text, !query.trimmingCharacters(in: .whitespaces).isEmpty, let vc = searchViewController.searchResultsController as? SearchResultsViewController else { return }
+        
+        vc.delegate = self
+        
+        APIManager.shared.searchVideos(with: query) { result in
+            switch result{
+                
+            case .success(let videoResponse):
+                vc.configure(with: videoResponse)
+            case .failure(_):
+                break
+            }
+        }
+    }
+
 }
 
 
 extension SearchVideosViewController: SearchVideoCollectionViewCellDelegate{
+    
     func searchVideoCollectionViewCell(_ cell: SearchVideoCollectionViewCell, didChooseVideo video: SearchVideoViewModel) {
         self.delegate?.searchVideoViewController(self, video: video)
         self.dismiss(animated: true)

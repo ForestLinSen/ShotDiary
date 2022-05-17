@@ -363,17 +363,9 @@ extension DiaryViewController: UISearchControllerDelegate, UISearchResultsUpdati
         
     }
     
-//    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-//        guard let query = searchBar.text, let resultController = searchView.searchResultsController as? DiarySearchResultViewController else {
-//            print("Debug: something wrong querying")
-//            return
-//        }
-//        
-//        resultController.search(content: query)
-//    }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        guard let query = searchBar.text, let resultController = searchView.searchResultsController as? DiarySearchResultViewController else {
+        guard let query = searchBar.text, !query.trimmingCharacters(in: .whitespaces).isEmpty, let resultController = searchView.searchResultsController as? DiarySearchResultViewController else {
             print("Debug: something wrong querying")
             return
         }

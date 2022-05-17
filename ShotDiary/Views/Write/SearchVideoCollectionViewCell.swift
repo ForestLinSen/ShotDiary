@@ -73,7 +73,7 @@ class SearchVideoCollectionViewCell: UICollectionViewCell {
         }
 
         delegate?.searchVideoCollectionViewCell(self, didChooseVideo: viewModel)
-        print("Debug: choose button")
+        delegate?.dismiss(animated: true)
     }
     
 }

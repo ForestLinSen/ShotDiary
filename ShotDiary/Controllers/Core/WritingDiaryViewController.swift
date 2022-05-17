@@ -424,6 +424,7 @@ extension WritingDiaryViewController: PHPickerViewControllerDelegate{
 // MARK: - Search video delegate
 extension WritingDiaryViewController: SearchVideoViewControllerDelegate{
     func searchVideoViewController(_ controller: SearchVideosViewController, video: SearchVideoViewModel) {
+        print("Debug: did choose video from searchViewController")
         videoURL = video.videoURL
         displayChosenVideo()
     }
