@@ -50,6 +50,13 @@ class DiaryViewModel{
         return fileFolder.appendingPathComponent(fileURL)
     }
     
+    static func getRelativeFilePath(with fileName: String) -> URL{
+        let fileManager = FileManager.default
+        let documentFolder = try! fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: false)
+        let fileFolder = documentFolder.appendingPathComponent("userVideos")
+        return fileFolder.appendingPathComponent(fileName)
+    }
+    
     func getPreviewImage() -> UIImage?{
         let url = getRelativeFilePath()
         let asset = AVURLAsset(url: url)

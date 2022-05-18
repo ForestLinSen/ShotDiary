@@ -18,6 +18,10 @@ protocol WritingDiaryViewControllerDelegate: UIViewController{
     func writingDiaryViewControllerDidFinishEditing(_ controller: WritingDiaryViewController)
 }
 
+protocol WritingDiaryViewControllerInEditMode: UIViewController{
+    func writingDiaryViewControllerDidFinishEditing(_ controller: WritingDiaryViewController, title: String, content: String, fileName: String)
+}
+
 class WritingDiaryViewController: UIViewController {
     
     var videoURL: URL?
@@ -26,6 +30,7 @@ class WritingDiaryViewController: UIViewController {
     var fileName: String?
     let playerViewController = AVPlayerViewController()
     weak var delegate: WritingDiaryViewControllerDelegate?
+    weak var editDelegate: WritingDiaryViewControllerInEditMode?
     var viewModelForEdit: DiaryViewModel?
     var onlineVideo = false
     
@@ -488,6 +493,8 @@ extension WritingDiaryViewController{
         
         // Update video if necessary
         let folderURL = getFolderURL()
+        let title = titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text!
+        let content = textEditor.text ?? ""
         if fileName != viewModel.fileURL{
             // video from user library
             if !onlineVideo{
@@ -497,11 +504,12 @@ extension WritingDiaryViewController{
                     let data = try Data(contentsOf: videoURL!)
                     try data.write(to: fileURL)
                     CoreDataManager.shared.updateItem(for: viewModel.diaryID,
-                                                      title: titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text!,
-                                                      content: textEditor.text ?? "",
+                                                      title: title,
+                                                      content: content,
                                                       fileName: fileName!)
                     self.dismiss(animated: true)
                     self.delegate?.writingDiaryViewControllerDidFinishEditing(self)
+                    self.editDelegate?.writingDiaryViewControllerDidFinishEditing(self, title: title, content: content, fileName: fileName!)
                 }catch{
                     
                 }
@@ -518,12 +526,13 @@ extension WritingDiaryViewController{
                         
                         DispatchQueue.main.async {
                             CoreDataManager.shared.updateItem(for: viewModel.diaryID,
-                                                              title: self.titleEditor.text?.count == 0 ? "Untitled" : self.titleEditor.text!,
-                                                              content: self.textEditor.text ?? "",
+                                                              title: title,
+                                                              content: content,
                                                               fileName: self.fileName!)
                             ProgressHUD.dismiss()
                             self.dismiss(animated: true)
                             self.delegate?.writingDiaryViewControllerDidFinishEditing(self)
+                            self.editDelegate?.writingDiaryViewControllerDidFinishEditing(self, title: title, content: content, fileName: self.fileName!)
                         }
                     }
                 }
@@ -537,6 +546,7 @@ extension WritingDiaryViewController{
                                               fileName: fileName!)
             self.dismiss(animated: true)
             self.delegate?.writingDiaryViewControllerDidFinishEditing(self)
+            self.editDelegate?.writingDiaryViewControllerDidFinishEditing(self, title: title, content: content, fileName: fileName!)
         }
         
         

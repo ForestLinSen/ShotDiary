@@ -64,6 +64,7 @@ class DiaryCellViewController: UIViewController {
     func presentEditInterface(){
         let vc = WritingDiaryViewController()
         vc.delegate = self.delegate
+        vc.editDelegate = self
         vc.title = "Edit"
         vc.loadDiaryForEditMode(with: self.viewModel)
         let nav = UINavigationController(rootViewController: vc)
@@ -125,6 +126,18 @@ class DiaryCellViewController: UIViewController {
         titleLabel.text = viewModel.title
         contentLabel.text = viewModel.content
     }
-    
+}
 
+
+extension DiaryCellViewController: WritingDiaryViewControllerInEditMode{
+    func writingDiaryViewControllerDidFinishEditing(_ controller: WritingDiaryViewController, title: String, content: String, fileName: String) {
+        titleLabel.text = title
+        contentLabel.text = content
+        
+        let fileURL = DiaryViewModel.getRelativeFilePath(with: fileName)
+        player = AVPlayer(url: fileURL)
+        playerLayer?.player = player
+        player?.play()
+    }
+    
 }
