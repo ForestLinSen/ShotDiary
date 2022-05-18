@@ -15,6 +15,7 @@ import ProgressHUD
 
 protocol WritingDiaryViewControllerDelegate: UIViewController{
     func writingDiaryViewControllerDidFinishPosting(_ controller: WritingDiaryViewController, newItem: DiaryViewModel)
+    func writingDiaryViewControllerDidFinishEditing(_ controller: WritingDiaryViewController)
 }
 
 class WritingDiaryViewController: UIViewController {
@@ -25,6 +26,8 @@ class WritingDiaryViewController: UIViewController {
     var fileName: String?
     let playerViewController = AVPlayerViewController()
     weak var delegate: WritingDiaryViewControllerDelegate?
+    var viewModelForEdit: DiaryViewModel?
+    var onlineVideo = false
     
     private let titleEditor: UITextField = {
         let titleEditor = UITextField()
@@ -75,10 +78,28 @@ class WritingDiaryViewController: UIViewController {
     private let rightBarButton: UIButton = {
         let rightBarButton = UIButton()
         rightBarButton.frame = CGRect(x: 0, y: 0, width: 64, height: 34)
-
+        
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = K.mainOrange
         config.title = "Post"
+        config.cornerStyle = .medium
+        config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incomming in
+            var outgoing = incomming
+            outgoing.font = .systemFont(ofSize: 14, weight: .semibold)
+            return outgoing
+        })
+        rightBarButton.configuration = config
+        
+        return rightBarButton
+    }()
+    
+    private let rightBarEditButton: UIButton = {
+        let rightBarButton = UIButton()
+        rightBarButton.frame = CGRect(x: 0, y: 0, width: 64, height: 34)
+        
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = K.mainOrange
+        config.title = "Confirm"
         config.cornerStyle = .medium
         config.titleTextAttributesTransformer = UIConfigurationTextAttributesTransformer({ incomming in
             var outgoing = incomming
@@ -99,11 +120,11 @@ class WritingDiaryViewController: UIViewController {
         view.addSubview(titleEditor)
         view.addSubview(videoFrame)
         view.addSubview(addVideoButton)
-
+        
         textEditor.delegate = self
         textEditor.pasteDelegate = self
         titleEditor.delegate = self
- 
+        
         rightBarButton.addTarget(self, action: #selector(didTapPostButton), for: .touchUpInside)
         
         navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBarButton)
@@ -114,7 +135,7 @@ class WritingDiaryViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-
+        
         let editorWidth = view.frame.width*0.75
         let titleHeight = min(view.frame.height/15, 350)
         let leftPadding = (view.frame.width-editorWidth)/2
@@ -123,12 +144,12 @@ class WritingDiaryViewController: UIViewController {
         
         let playerSize = view.frame.width*0.38
         videoFrame.frame = CGRect(x: (view.frame.width-playerSize)/2, y: view.safeAreaInsets.bottom + padding, width: playerSize, height: playerSize)
-
+        
         addVideoButton.frame = CGRect(x: (view.frame.width-buttonSize)/2,
                                       y: view.safeAreaInsets.bottom + padding + (videoFrame.frame.height-buttonSize)/2,
                                       width: buttonSize, height: buttonSize)
         
-
+        
         
         titleEditor.frame = CGRect(x: leftPadding, y: videoFrame.frame.origin.y+videoFrame.frame.height+padding*3.5,
                                    width: editorWidth, height: titleHeight)
@@ -153,28 +174,28 @@ class WritingDiaryViewController: UIViewController {
         
         DispatchQueue.main.async {[weak self] in
             //let videoURL = URL(string: "https://www.radiantmediaplayer.com/media/bbb-360p.mp4")
-
+            
             guard let strongSelf = self else { return }
             
             strongSelf.player = AVPlayer(url: url)
             strongSelf.playerLayer = AVPlayerLayer(player: self?.player)
             strongSelf.playerViewController.player = AVPlayer(url: url)
             strongSelf.playerViewController.videoGravity = .resizeAspectFill
-
+            
             strongSelf.view.addSubview((self?.playerViewController.view)!)
             strongSelf.playerViewController.view.frame = (self?.videoFrame.frame)!
             strongSelf.playerViewController.view.layer.cornerRadius = 15
             strongSelf.playerViewController.view.clipsToBounds = true
-
+            
             let buttonSize = CGFloat(40)
             strongSelf.view.addSubview(strongSelf.cancelButton)
             strongSelf.cancelButton.frame = CGRect(x: (strongSelf.view.frame.width-buttonSize)/2,
                                                    y: strongSelf.videoFrame.frame.origin.y + strongSelf.videoFrame.frame.height + 10,
-                                        width: buttonSize,
-                                        height: buttonSize)
+                                                   width: buttonSize,
+                                                   height: buttonSize)
             strongSelf.cancelButton.addTarget(self, action: #selector(strongSelf.discardCurrentVideo), for: .touchUpInside)
         }
- 
+        
     }
     
     //MARK: - Button functions
@@ -225,12 +246,11 @@ class WritingDiaryViewController: UIViewController {
         if !folderExists{
             try! FileManager.default.createDirectory(at: folderURL, withIntermediateDirectories: false)
         }
-       
-        if fileName == nil {
+        
+        if onlineVideo {
             // Video from Pexels
             print("Debug: begin to download file")
-            let onlineFileName = Helper.generateVideoFileName()
-            let fileURL = folderURL.appendingPathComponent(onlineFileName)
+            let fileURL = folderURL.appendingPathComponent(fileName!)
             ProgressHUD.show("Uploading...")
             APIManager.shared.downloadOnlineVideo(from: videoURL!, fileURL: fileURL) {[weak self] success in
                 guard let strongSelf = self else { return }
@@ -242,22 +262,22 @@ class WritingDiaryViewController: UIViewController {
                         let date1 = Date.parse("2022-01-01")
                         let date2 = Date.parse("2022-05-01")
                         
-                        let viewModel = DiaryViewModel(title: (strongSelf.titleEditor.text?.count == 0 ? "Untitled" : strongSelf.titleEditor.text) ?? "Untitled", content: strongSelf.textEditor.text ?? "", fileURL: onlineFileName, date: Date.randomBetween(start: date1, end: date2))
+                        let viewModel = DiaryViewModel(title: (strongSelf.titleEditor.text?.count == 0 ? "Untitled" : strongSelf.titleEditor.text) ?? "Untitled",
+                                                       content: strongSelf.textEditor.text ?? "",
+                                                       fileURL: strongSelf.fileName!,
+                                                       date: Date.randomBetween(start: date1, end: date2),
+                                                       diaryID: UUID())
                         
                         CoreDataManager.shared.createItems(viewModel: viewModel){ success in
-                                UIView.animate(withDuration: 0.2) {
-                                    strongSelf.tabBarController?.selectedIndex = 0
-                                }
+                            UIView.animate(withDuration: 0.2) {
+                                strongSelf.tabBarController?.selectedIndex = 0
+                            }
                             
-
                             strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
                             strongSelf.clearPlayerInfo()
                             ProgressHUD.dismiss()
                         }
                     }
-                    
-                    
-                    
                 }
             }
             
@@ -276,7 +296,7 @@ class WritingDiaryViewController: UIViewController {
                 let date1 = Date.parse("2022-01-01")
                 let date2 = Date.parse("2022-05-01")
                 
-                let viewModel = DiaryViewModel(title: (titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text) ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date.randomBetween(start: date1, end: date2))
+                let viewModel = DiaryViewModel(title: (titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text) ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date.randomBetween(start: date1, end: date2), diaryID: UUID())
                 
                 CoreDataManager.shared.createItems(viewModel: viewModel){[weak self] success in
                     guard let strongSelf = self else { return }
@@ -285,18 +305,16 @@ class WritingDiaryViewController: UIViewController {
                     UIView.animate(withDuration: 0.2) {
                         strongSelf.tabBarController?.selectedIndex = 0
                     }
-
+                    
                     strongSelf.delegate?.writingDiaryViewControllerDidFinishPosting(strongSelf, newItem: viewModel)
                     strongSelf.clearPlayerInfo()
                     ProgressHUD.dismiss()
                 }
-                
-                
             }catch{
                 print("Debug: something wrong \(error)")
             }
         }
-
+        
     }
     
     private func clearPlayerInfo(){
@@ -304,6 +322,7 @@ class WritingDiaryViewController: UIViewController {
         titleEditor.placeholder = "Untitled"
         videoURL = nil
         fileName = nil
+        onlineVideo = false
         textEditor.text = "How are you today?"
         textEditor.textColor = K.mainNavy
         player?.pause()
@@ -322,7 +341,7 @@ class WritingDiaryViewController: UIViewController {
         let folderURL = documentsFolder.appendingPathComponent(folderName)
         return folderURL
     }
-
+    
     @objc func didTapAddVideoButton(){
         let actionsheet = UIAlertController(title: "Choose a Video", message: "Choose a video from your library or search videos online", preferredStyle: .actionSheet)
         actionsheet.addAction(UIAlertAction(title: "Your Video Library", style: .default, handler: {[weak self] _ in
@@ -426,6 +445,105 @@ extension WritingDiaryViewController: SearchVideoViewControllerDelegate{
     func searchVideoViewController(_ controller: SearchVideosViewController, video: SearchVideoViewModel) {
         print("Debug: did choose video from searchViewController")
         videoURL = video.videoURL
+        fileName = Helper.generateVideoFileName()
+        onlineVideo = true
         displayChosenVideo()
     }
+}
+
+
+// MARK: - For Edit Mode
+
+extension WritingDiaryViewController{
+    
+    
+    func loadDiaryForEditMode(with viewModel: DiaryViewModel){
+        viewModelForEdit = viewModel
+        
+        rightBarButton.removeFromSuperview()
+        view.addSubview(rightBarEditButton)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: rightBarEditButton)
+        rightBarEditButton.addTarget(self, action: #selector(didTapEditButton), for: .touchUpInside)
+        
+        fileName = viewModel.fileURL
+        titleEditor.text = viewModel.title
+        textEditor.text = viewModel.content
+        textEditor.textColor = K.mainBlack
+        videoURL = viewModel.getRelativeFilePath()
+        displayChosenVideo()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel, target: self, action: #selector(didTapCancelButton))
+        
+        
+    }
+    
+    @objc func didTapEditButton(){
+        guard let viewModel = viewModelForEdit else { return }
+        
+        guard videoURL != nil else{
+            let alert = UIAlertController(title: "Whoops", message: "Please Upload a Video", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "OK", style: .cancel))
+            present(alert, animated: true)
+            return
+        }
+        
+        // Update video if necessary
+        let folderURL = getFolderURL()
+        if fileName != viewModel.fileURL{
+            // video from user library
+            if !onlineVideo{
+                print("Debug: not online video")
+                let fileURL = folderURL.appendingPathComponent(fileName!)
+                do{
+                    let data = try Data(contentsOf: videoURL!)
+                    try data.write(to: fileURL)
+                    CoreDataManager.shared.updateItem(for: viewModel.diaryID,
+                                                      title: titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text!,
+                                                      content: textEditor.text ?? "",
+                                                      fileName: fileName!)
+                    self.dismiss(animated: true)
+                    self.delegate?.writingDiaryViewControllerDidFinishEditing(self)
+                }catch{
+                    
+                }
+            }else{
+                // video from Pexels
+                print("Debug: begin to download file")
+                let onlineFileName = Helper.generateVideoFileName()
+                fileName = onlineFileName
+                let fileURL = folderURL.appendingPathComponent(onlineFileName)
+                ProgressHUD.show("Uploading...")
+                APIManager.shared.downloadOnlineVideo(from: videoURL!, fileURL: fileURL) {[weak self] success in
+                    guard let self = self else { return }
+                    if success{
+                        
+                        DispatchQueue.main.async {
+                            CoreDataManager.shared.updateItem(for: viewModel.diaryID,
+                                                              title: self.titleEditor.text?.count == 0 ? "Untitled" : self.titleEditor.text!,
+                                                              content: self.textEditor.text ?? "",
+                                                              fileName: self.fileName!)
+                            ProgressHUD.dismiss()
+                            self.dismiss(animated: true)
+                            self.delegate?.writingDiaryViewControllerDidFinishEditing(self)
+                        }
+                    }
+                }
+            }
+        }else{
+            // Update the Core Data
+            print("Debug: didn't change the video")
+            CoreDataManager.shared.updateItem(for: viewModel.diaryID,
+                                              title: titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text!,
+                                              content: textEditor.text ?? "",
+                                              fileName: fileName!)
+            self.dismiss(animated: true)
+            self.delegate?.writingDiaryViewControllerDidFinishEditing(self)
+        }
+        
+        
+    }
+    
+    @objc func didTapCancelButton(){
+        self.dismiss(animated: true)
+    }
+    
 }

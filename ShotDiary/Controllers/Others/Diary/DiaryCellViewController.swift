@@ -13,15 +13,7 @@ class DiaryCellViewController: UIViewController {
     private let viewModel: DiaryViewModel
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        view.backgroundColor = K.mainBlack
-        addVideoLayer()
-        configure()
-        tabBarController?.tabBar.isHidden = true
-    }
+    weak var delegate: WritingDiaryViewControllerDelegate?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -38,6 +30,46 @@ class DiaryCellViewController: UIViewController {
         return label
         
     }()
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        view.backgroundColor = K.mainBlack
+        addVideoLayer()
+        configure()
+        tabBarController?.tabBar.isHidden = true
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "ellipsis"), style: .plain, target: self, action: #selector(didTapActionButton))
+    }
+    
+    @objc func didTapActionButton(){
+        let actionSheet = UIAlertController(title: "Edit or Delete Your Diary", message: "", preferredStyle: .actionSheet)
+        actionSheet.addAction(UIAlertAction(title: "Edit", style: .default, handler: {[weak self] _ in
+            self?.presentEditInterface()
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: {[weak self] _ in
+            let alert = UIAlertController(title: "Confirm", message: "Do you want to delete this diary?", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
+                
+            }))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+            
+            self?.present(alert, animated: true)
+        }))
+        
+        actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+        present(actionSheet, animated: true)
+    }
+    
+    func presentEditInterface(){
+        let vc = WritingDiaryViewController()
+        vc.delegate = self.delegate
+        vc.title = "Edit"
+        vc.loadDiaryForEditMode(with: self.viewModel)
+        let nav = UINavigationController(rootViewController: vc)
+        present(nav, animated: true)
+    }
+
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)

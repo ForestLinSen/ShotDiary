@@ -3,10 +3,11 @@
     <entity name="Diary" representedClassName=".Diary" syncable="YES">
         <attribute name="content" optional="YES" attributeType="String"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="diaryID" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="fileURL" optional="YES" attributeType="String"/>
         <attribute name="title" optional="YES" attributeType="String"/>
     </entity>
     <elements>
-        <element name="Diary" positionX="-63" positionY="-18" width="128" height="89"/>
+        <element name="Diary" positionX="-63" positionY="-18" width="128" height="104"/>
     </elements>
 </model>

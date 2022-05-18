@@ -81,9 +81,9 @@ class DiaryViewController: UIViewController {
         
         segmentedControl.addTarget(self, action: #selector(segmentedControlDidChange(_:)), for: .valueChanged)
         
-        fetchData()
-        
-        CoreDataManager.shared.searchItem(with: "Another")
+        fetchData{ _ in
+            
+        }
         
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = K.mainBlack
@@ -91,17 +91,18 @@ class DiaryViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = navBarAppearance
     }
     
-    private func fetchData(){
+    private func fetchData(completion: @escaping (Bool) -> Void){
         CoreDataManager.shared.getAllItems {[weak self] viewModels in
             guard let viewModels = viewModels else {
                 return
             }
 
             self?.diaryViewModels = viewModels
-            
             let groupedViewModels = Dictionary(grouping: viewModels) { $0.group }
             self?.groupedSections = groupedViewModels.map {GroupedDiaryViewModel(sectionName: $0.key, viewModels: $0.value)}
             self?.sortData()
+            
+            completion(true)
         }
     }
     
@@ -254,7 +255,9 @@ extension DiaryViewController: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        navigationController?.pushViewController(DiaryCellViewController(viewModel: diaryViewModels[indexPath.row]), animated: true)
+        let vc = DiaryCellViewController(viewModel: diaryViewModels[indexPath.row])
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -323,7 +326,9 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        navigationController?.pushViewController(DiaryCellViewController(viewModel: diaryViewModels[indexPath.row]), animated: true)
+        let vc = DiaryCellViewController(viewModel: diaryViewModels[indexPath.row])
+        vc.delegate = self
+        navigationController?.pushViewController(vc, animated: true)
     }
     
     
@@ -384,6 +389,17 @@ extension DiaryViewController: UISearchBarDelegate{
 
 
 extension DiaryViewController: WritingDiaryViewControllerDelegate{
+    func writingDiaryViewControllerDidFinishEditing(_ controller: WritingDiaryViewController) {
+        fetchData {[weak self] success in
+            if success{
+                self?.collectionView.reloadData()
+                self?.galleryCollectionView.reloadData()
+                self?.classicTableView.reloadData()
+            }
+        }
+        
+    }
+    
     func writingDiaryViewControllerDidFinishPosting(_ controller: WritingDiaryViewController, newItem: DiaryViewModel) {
         self.diaryViewModels.append(newItem)
 

@@ -34,7 +34,7 @@ class DiarySearchResultViewController: UIViewController {
     func search(content: String){
         let results = CoreDataManager.shared.searchItem(with: content)
         let viewModels = results.compactMap { diary in
-            return DiaryViewModel(title: diary.title ?? "", content: diary.content ?? "", fileURL: diary.fileURL ?? "", date: diary.date ?? Date())
+            return DiaryViewModel(title: diary.title ?? "", content: diary.content ?? "", fileURL: diary.fileURL ?? "", date: diary.date ?? Date(), diaryID: diary.diaryID ?? UUID())
         }
         
         DispatchQueue.main.async {[weak self] in

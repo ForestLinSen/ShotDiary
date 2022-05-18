@@ -19,7 +19,7 @@ class CoreDataManager{
             let items = try context.fetch(Diary.fetchRequest())
             
             let viewModels = items.compactMap { diary in
-                return DiaryViewModel(title: diary.title!, content: diary.content!, fileURL: diary.fileURL!, date: diary.date!)
+                return DiaryViewModel(title: diary.title!, content: diary.content!, fileURL: diary.fileURL!, date: diary.date!, diaryID: diary.diaryID!)
             }
             
             print("Debug: fetch item -> \(viewModels)")
@@ -36,6 +36,7 @@ class CoreDataManager{
         newItem.content = viewModel.content
         newItem.fileURL = viewModel.fileURL
         newItem.date = viewModel.date
+        newItem.diaryID = viewModel.diaryID
         
         do{
             try context.save()
@@ -48,7 +49,20 @@ class CoreDataManager{
     
     func deleteItem(){}
     
-    func updateItem(){}
+    func updateItem(for id: UUID, title: String, content: String, fileName: String){
+        let fetchRequest = Diary.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "diaryID = %@", id as CVarArg)
+        
+        do{
+            guard let diary = try context.fetch(fetchRequest).first else { return }
+            diary.title = title
+            diary.content = content
+            diary.fileURL = fileName
+            try context.save()
+        }catch{
+            print("Debug: something wrong when updating the item")
+        }
+    }
     
     func searchItem(with query: String) -> [Diary] {
         let fetchRequest = Diary.fetchRequest()

@@ -13,6 +13,8 @@ class DiaryViewModel{
     let content: String
     let fileURL: String
     let date: Date
+    let diaryID: UUID
+    
     let year: Int
     let month: Int
     let day: Int
@@ -21,11 +23,13 @@ class DiaryViewModel{
     let displayCollectionCellDate: String
     let displayCollectionDate: String
     
-    init(title: String, content: String, fileURL: String, date: Date){
+    init(title: String, content: String, fileURL: String, date: Date, diaryID: UUID){
         self.title = title
         self.content = content
         self.fileURL = fileURL
         self.date = date
+        self.diaryID = diaryID
+        
         self.displayDate = Helper.formatDate(date: date)
         self.displayCollectionDate = Helper.formateCollectionDate(date: date)
         self.displayCollectionCellDate = Helper.formateCollectionCellDate(date: date)
@@ -51,7 +55,6 @@ class DiaryViewModel{
         let asset = AVURLAsset(url: url)
         let imageGenerator = AVAssetImageGenerator(asset: asset)
         let duration = asset.duration
-        
         
         do{
             let preViewImage = try imageGenerator.copyCGImage(at: CMTime(seconds: duration.seconds*0.25, preferredTimescale: duration.timescale), actualTime: nil)

@@ -20,6 +20,7 @@ extension Diary {
     @NSManaged public var content: String?
     @NSManaged public var fileURL: String?
     @NSManaged public var date: Date?
+    @NSManaged public var diaryID: UUID?
 
 }
 
