@@ -32,8 +32,6 @@ class HomeViewController: UITabBarController {
         writingVC.delegate = diaryVC
 
         let nav1 = UINavigationController(rootViewController: diaryVC)
-        nav1.navigationBar.barStyle = .black
-        
         let nav2 = UINavigationController(rootViewController: writingVC)
         let nav3 = UINavigationController(rootViewController: settingsVC)
         

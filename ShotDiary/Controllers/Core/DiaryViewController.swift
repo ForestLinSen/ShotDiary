@@ -86,7 +86,7 @@ class DiaryViewController: UIViewController {
         }
         
         let navBarAppearance = UINavigationBarAppearance()
-        navBarAppearance.backgroundColor = K.mainBlack
+        navBarAppearance.backgroundColor = K.mainNavy
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
         navigationController?.navigationBar.standardAppearance = navBarAppearance
     }
@@ -261,7 +261,7 @@ extension DiaryViewController: UITableViewDelegate, UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 120
+        return 100
     }
 }
 

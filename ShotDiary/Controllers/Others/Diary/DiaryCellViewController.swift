@@ -14,6 +14,7 @@ class DiaryCellViewController: UIViewController {
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
     weak var delegate: WritingDiaryViewControllerDelegate?
+    private var observer: NSObjectProtocol?
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -115,6 +116,14 @@ class DiaryCellViewController: UIViewController {
             playerLayer?.videoGravity = .resizeAspectFill
             view.layer.addSublayer(playerLayer!)
             player?.play()
+            
+            observer = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
+                                                              object: player?.currentItem,
+                                                              queue: .main,
+                                                              using: {[weak self] _ in
+                self?.player?.seek(to: .zero)
+                self?.player?.play()
+            })
         }catch{
             print("Debug: cannot fetch given file")
         }
