@@ -145,6 +145,7 @@ class DiaryCellViewController: UIViewController {
         view.addSubview(fullTextView)
         backgroundView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
         fullTextView.frame = CGRect(x: 20, y: view.frame.height-65-150-40, width: 300, height: 150)
+        videoModeButton.frame = showFullTextButton.frame
         
         UIView.animate(withDuration: 0.25) {
             self.showFullTextButton.removeFromSuperview()
@@ -184,7 +185,7 @@ class DiaryCellViewController: UIViewController {
     }
     
     @objc func didTapVideoModeButton(){
-        
+        showFullTextButton.frame = videoModeButton.frame
         videoModeButton.removeFromSuperview()
         fullTextView.removeFromSuperview()
         view.addSubview(contentLabel)
