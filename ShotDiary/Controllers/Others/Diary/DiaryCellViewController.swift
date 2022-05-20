@@ -8,12 +8,17 @@
 import UIKit
 import AVFoundation
 
+protocol DiaryCellViewControllerDelegate: UIViewController{
+    func diaryCellViewControllerDidDeleteDiary(_ controller: DiaryCellViewController)
+}
+
 class DiaryCellViewController: UIViewController {
     
     private let viewModel: DiaryViewModel
     var player: AVPlayer?
     var playerLayer: AVPlayerLayer?
     weak var delegate: WritingDiaryViewControllerDelegate?
+    weak var deleteDelegate: DiaryCellViewControllerDelegate?
     private var observer: NSObjectProtocol?
     private var fullTextMode = false
     
@@ -84,13 +89,21 @@ class DiaryCellViewController: UIViewController {
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: {[weak self] _ in
+            
+            guard let self = self else { return }
+            
             let alert = UIAlertController(title: "Confirm", message: "Do you want to delete this diary?", preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "Delete", style: .destructive, handler: { _ in
-                
+                CoreDataManager.shared.deleteItem(for: self.viewModel.diaryID) { success in
+                    if success{
+                        self.deleteDelegate?.diaryCellViewControllerDidDeleteDiary(self)
+                        self.navigationController?.popToRootViewController(animated: true)
+                    }
+                }
             }))
             alert.addAction(UIAlertAction(title: "Cancel", style: .cancel))
             
-            self?.present(alert, animated: true)
+            self.present(alert, animated: true)
         }))
         
         actionSheet.addAction(UIAlertAction(title: "Cancel", style: .cancel))

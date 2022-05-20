@@ -47,7 +47,19 @@ class CoreDataManager{
         }
     }
     
-    func deleteItem(){}
+    func deleteItem(for id: UUID, completion: @escaping (Bool) -> Void){
+        let fetchRequest = Diary.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "diaryID = %@", id as CVarArg)
+        
+        do{
+            guard let diary = try context.fetch(fetchRequest).first else { return }
+            context.delete(diary)
+            try context.save()
+            completion(true)
+        }catch{
+            completion(false)
+        }
+    }
     
     func updateItem(for id: UUID, title: String, content: String, fileName: String){
         let fetchRequest = Diary.fetchRequest()

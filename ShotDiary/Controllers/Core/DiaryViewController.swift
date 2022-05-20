@@ -257,6 +257,7 @@ extension DiaryViewController: UITableViewDelegate, UITableViewDataSource{
         tableView.deselectRow(at: indexPath, animated: true)
         let vc = DiaryCellViewController(viewModel: diaryViewModels[indexPath.row])
         vc.delegate = self
+        vc.deleteDelegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -328,6 +329,7 @@ extension DiaryViewController: UICollectionViewDelegate, UICollectionViewDataSou
         collectionView.deselectItem(at: indexPath, animated: true)
         let vc = DiaryCellViewController(viewModel: diaryViewModels[indexPath.row])
         vc.delegate = self
+        vc.deleteDelegate = self
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -421,6 +423,18 @@ extension DiaryViewController: WritingDiaryViewControllerDelegate{
         self.galleryCollectionView.reloadData()
         self.classicTableView.reloadData()
     }
-    
 
+}
+
+
+extension DiaryViewController: DiaryCellViewControllerDelegate{
+    func diaryCellViewControllerDidDeleteDiary(_ controller: DiaryCellViewController) {
+        fetchData { success in
+            if success{
+                self.collectionView.reloadData()
+                self.galleryCollectionView.reloadData()
+                self.classicTableView.reloadData()
+            }
+        }
+    }
 }
