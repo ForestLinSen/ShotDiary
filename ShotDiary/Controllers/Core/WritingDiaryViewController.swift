@@ -118,8 +118,13 @@ class WritingDiaryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Write"
         
+        if let _ = viewModelForEdit{
+            title = "Edit"
+        }else{
+            title = "Write"
+        }
+
         view.backgroundColor = .systemBackground
         view.addSubview(textEditor)
         view.addSubview(titleEditor)
@@ -136,6 +141,12 @@ class WritingDiaryViewController: UIViewController {
         
         addVideoButton.addTarget(self, action: #selector(didTapAddVideoButton), for: .touchUpInside)
         displayChosenVideo()
+        
+        let navBarAppearance = UINavigationBarAppearance()
+        navBarAppearance.backgroundColor = K.mainNavy
+        navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+        navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
+        navigationController?.navigationBar.standardAppearance = navBarAppearance
     }
     
     override func viewDidLayoutSubviews() {

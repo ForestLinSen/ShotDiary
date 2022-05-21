@@ -36,6 +36,7 @@
 		B9B8622A282027C9004D1B75 /* PageKind.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B86229282027C8004D1B75 /* PageKind.swift */; };
 		B9B8622C28203057004D1B75 /* DiaryCollectionViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */; };
 		B9B8622E28204709004D1B75 /* GalleryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9B8622D28204709004D1B75 /* GalleryCollectionViewCell.swift */; };
+		B9CE4C5B28389C24001753BA /* SwitchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9CE4C5A28389C24001753BA /* SwitchTableViewCell.swift */; };
 		B9E59DCD283201E400F39850 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = B9E59DCC283201E400F39850 /* IQKeyboardManagerSwift */; };
 		B9E59DD0283211B600F39850 /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = B9E59DCF283211B600F39850 /* ProgressHUD */; };
 		B9E59DD228323D5800F39850 /* DiarySearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E59DD128323D5800F39850 /* DiarySearchResultViewController.swift */; };
@@ -73,6 +74,7 @@
 		B9B86229282027C8004D1B75 /* PageKind.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageKind.swift; sourceTree = "<group>"; };
 		B9B8622B28203057004D1B75 /* DiaryCollectionViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryCollectionViewHeaderView.swift; sourceTree = "<group>"; };
 		B9B8622D28204709004D1B75 /* GalleryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GalleryCollectionViewCell.swift; sourceTree = "<group>"; };
+		B9CE4C5A28389C24001753BA /* SwitchTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchTableViewCell.swift; sourceTree = "<group>"; };
 		B9E59DD128323D5800F39850 /* DiarySearchResultViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiarySearchResultViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -229,6 +231,7 @@
 		B9B86220281FEBFD004D1B75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				B9CE4C5928389970001753BA /* Settings */,
 				B980CE862826DB1200244C4A /* Write */,
 				B9B86221281FEC05004D1B75 /* Diary */,
 			);
@@ -253,6 +256,14 @@
 				B95964F8282685C600CBDA8F /* VideosReponse.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		B9CE4C5928389970001753BA /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				B9CE4C5A28389C24001753BA /* SwitchTableViewCell.swift */,
+			);
+			path = Settings;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -343,6 +354,7 @@
 				B9068CD328242BDC002B244A /* DiaryCellViewController.swift in Sources */,
 				B980CE8A2826DCBE00244C4A /* SearchVideoViewModel.swift in Sources */,
 				B962D87E28218FB200CF8B63 /* CoreDataManager.swift in Sources */,
+				B9CE4C5B28389C24001753BA /* SwitchTableViewCell.swift in Sources */,
 				B95964F22826434000CBDA8F /* APIManager.swift in Sources */,
 				B9B8621D281FE531004D1B75 /* WritingDiaryViewController.swift in Sources */,
 				B962D881282190D000CF8B63 /* DiaryViewModel.swift in Sources */,

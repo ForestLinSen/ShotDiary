@@ -33,4 +33,6 @@ class K{
     static let deepRed = UIColor(red: 0.63, green: 0.2, blue: 0.2, alpha: 1.0)
     static let deepOrange = UIColor(red: 0.7, green: 0.32, blue: 0.11, alpha: 1.0)
 
+    static let grayTextColor = UIColor(red: 0.7, green: 0.7, blue: 0.7, alpha: 1.0)
+    static let grayTextColorWithBackground = UIColor(red: 0.9, green: 0.9, blue: 0.9, alpha: 1.0)
 }

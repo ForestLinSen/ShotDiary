@@ -29,6 +29,15 @@ class DiaryCellViewController: UIViewController {
         return label
     }()
     
+    private let dateLabel: UILabel = {
+        let label = UILabel()
+        label.font = .systemFont(ofSize: 14, weight: .regular)
+        label.numberOfLines = 0
+        label.textColor = K.grayTextColor
+        label.clipsToBounds = true
+        return label
+    }()
+    
     private let contentLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .regular)
@@ -132,11 +141,12 @@ class DiaryCellViewController: UIViewController {
         if !fullTextMode{
             let padding = CGFloat(20)
             let contentWidth = CGFloat(300)
-            let titleLabelHeight = CGFloat(65)
-            let contentLabelHeight = CGFloat(150)
+            let titleLabelHeight = CGFloat(50)
+            let contentLabelHeight = CGFloat(125)
             
-            titleLabel.frame = CGRect(x: padding, y: view.frame.height-titleLabelHeight*2-contentLabelHeight-padding*2, width: contentWidth, height: titleLabelHeight)
-            contentLabel.frame = CGRect(x: padding, y: view.frame.height-titleLabelHeight-contentLabelHeight-padding*2, width: contentWidth, height: contentLabelHeight)
+            titleLabel.frame = CGRect(x: padding, y: view.frame.height-titleLabelHeight*2-contentLabelHeight-padding*4, width: contentWidth, height: titleLabelHeight)
+            dateLabel.frame = CGRect(x: padding, y: view.frame.height-titleLabelHeight*2-contentLabelHeight-padding*3, width: contentWidth, height: titleLabelHeight)
+            contentLabel.frame = CGRect(x: padding, y: view.frame.height-titleLabelHeight-contentLabelHeight-padding*3, width: contentWidth, height: contentLabelHeight)
             
             titleLabel.sizeToFit()
             contentLabel.sizeToFit()
@@ -159,6 +169,7 @@ class DiaryCellViewController: UIViewController {
         backgroundView.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: view.frame.height)
         fullTextView.frame = CGRect(x: 20, y: view.frame.height-65-150-40, width: 300, height: 150)
         videoModeButton.frame = showFullTextButton.frame
+        view.bringSubviewToFront(dateLabel)
         
         UIView.animate(withDuration: 0.25) {
             self.showFullTextButton.removeFromSuperview()
@@ -168,12 +179,13 @@ class DiaryCellViewController: UIViewController {
             
             let padding = CGFloat(20)
             let contentWidth = self.view.frame.width*0.9
-            let titleLabelHeight = CGFloat(65)
+            let titleLabelHeight = CGFloat(50)
             let contentLabelHeight = self.view.frame.height-padding*2-titleLabelHeight-185
             let bottom = self.navigationController?.navigationBar.frame.size.height ?? 0
             
             self.titleLabel.frame = CGRect(x: padding, y: bottom+padding*4, width: contentWidth, height: titleLabelHeight)
-            self.fullTextView.frame = CGRect(x: padding, y: bottom+titleLabelHeight+padding*4, width: contentWidth, height: contentLabelHeight)
+            self.dateLabel.frame = CGRect(x: padding, y: bottom+padding*5, width: contentWidth, height: titleLabelHeight)
+            self.fullTextView.frame = CGRect(x: padding, y: bottom+titleLabelHeight+padding*5, width: contentWidth, height: contentLabelHeight)
             
             self.fullTextView.text = self.contentLabel.text
             
@@ -252,8 +264,10 @@ class DiaryCellViewController: UIViewController {
         view.addSubview(titleLabel)
         view.addSubview(contentLabel)
         view.addSubview(showFullTextButton)
+        view.addSubview(dateLabel)
         titleLabel.text = viewModel.title
         contentLabel.text = viewModel.content
+        dateLabel.text = viewModel.displayDate
     }
 }
 

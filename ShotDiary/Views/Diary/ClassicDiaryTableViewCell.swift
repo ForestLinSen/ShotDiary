@@ -64,7 +64,7 @@ class ClassicDiaryTableViewCell: UITableViewCell{
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        let imageSize = frame.height*0.6
+        let imageSize = frame.height*0.7
         let imageYPos = (frame.height-imageSize)/2
         let titleHeight = CGFloat(20)
         let padding = CGFloat(20)
