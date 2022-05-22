@@ -34,7 +34,6 @@ class DiaryViewController: UIViewController {
         vc.searchBar.placeholder = "Search your diary..."
         vc.searchBar.backgroundColor = .systemBackground
         vc.searchBar.searchBarStyle = .minimal
-        
         return vc
     }()
     
@@ -64,14 +63,12 @@ class DiaryViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
         
         setUpScrollView()
         setUpCollectionView()
         setUpTableView()
         setUpNavBar()
 
-        view.backgroundColor = .systemBackground
         navigationItem.titleView = segmentedControl
         navigationItem.searchController = searchView
         navigationItem.hidesSearchBarWhenScrolling = false
@@ -203,7 +200,7 @@ class DiaryViewController: UIViewController {
         classicTableView.register(ClassicDiaryTableViewCell.self, forCellReuseIdentifier: ClassicDiaryTableViewCell.identifier)
         classicTableView.delegate = self
         classicTableView.dataSource = self
-        classicTableView.backgroundColor = .systemBackground
+        classicTableView.backgroundColor = .secondarySystemFill
         scrollView.addSubview(classicTableView)
     }
     
@@ -229,7 +226,7 @@ class DiaryViewController: UIViewController {
         
         //scrollView.frame = CGRect(x: 0, y: 200, width: view.frame.width, height: view.frame.height)
         scrollView.frame = view.bounds
-        classicTableView.frame = scrollView.bounds
+        classicTableView.frame = CGRect(x: 0, y: 112, width: scrollView.frame.width, height: scrollView.frame.height-112)
         collectionView.frame = CGRect(x: scrollView.frame.width, y: 0, width: view.frame.width, height: view.frame.height)
         galleryCollectionView.frame = CGRect(x: scrollView.frame.width*2, y: 0, width: view.frame.width, height: view.frame.height)
     }
@@ -261,8 +258,21 @@ extension DiaryViewController: UITableViewDelegate, UITableViewDataSource{
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        let verticalPadding: CGFloat = 10
+
+        let maskLayer = CALayer()
+        maskLayer.cornerRadius = 10
+        maskLayer.backgroundColor = UIColor.white.cgColor
+        maskLayer.frame = CGRect(x: cell.bounds.origin.x,
+                                 y: cell.bounds.origin.y,
+                                 width: cell.bounds.width,
+                                 height: cell.bounds.height).insetBy(dx: verticalPadding, dy: verticalPadding/2)
+        cell.layer.mask = maskLayer
+    }
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 105
+        return 110
     }
 }
 
@@ -344,6 +354,7 @@ extension DiaryViewController: UIScrollViewDelegate{
 
         if offset > view.frame.width*0.6{
             segmentedControl.selectedSegmentIndex = 1
+            tabBarController?.tabBar.isHidden = false
             if navigationItem.searchController == nil{
                 navigationItem.searchController = searchView
             }
@@ -352,10 +363,12 @@ extension DiaryViewController: UIScrollViewDelegate{
         if offset > view.frame.width*1.6{
             segmentedControl.selectedSegmentIndex = 2
             navigationItem.searchController = nil
+            tabBarController?.tabBar.isHidden = true
         }
         
         if offset < view.frame.width*0.6 && offset > 1{
             segmentedControl.selectedSegmentIndex = 0
+            tabBarController?.tabBar.isHidden = false
             if navigationItem.searchController == nil{
                 navigationItem.searchController = searchView
             }

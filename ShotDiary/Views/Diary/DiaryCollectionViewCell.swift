@@ -39,6 +39,7 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
         contentView.addSubview(dateLabel)
         backgroundColor = .systemBackground
+
     }
     
     required init?(coder: NSCoder) {
@@ -47,8 +48,7 @@ class DiaryCollectionViewCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        
-        
+
         let imageSize = frame.width
         let labelHeight = frame.height/8
         let padding = CGFloat(5)
@@ -56,6 +56,7 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         previewImage.frame = CGRect(x: 0, y: 0, width: imageSize, height: imageSize)
         titleLabel.frame = CGRect(x: 0, y: imageSize+padding, width: frame.width, height: labelHeight)
         dateLabel.frame = CGRect(x: 0, y: imageSize+labelHeight+padding, width: frame.width, height: labelHeight)
+
     }
     
     func configure(with viewModel: DiaryViewModel){

@@ -16,10 +16,16 @@ class HomeViewController: UITabBarController {
         mxSignpost(.event, log: MXMetricManager.controllerLoad, name: "Debug: sign post")
         
         let appearance = UITabBarAppearance()
-        appearance.backgroundColor = .white
+        appearance.backgroundColor = .systemBackground
         tabBar.standardAppearance = appearance
         tabBar.scrollEdgeAppearance = appearance
-        tabBar.tintColor = K.mainNavyBackground
+        
+        
+        if traitCollection.userInterfaceStyle == .dark{
+            tabBar.tintColor = K.mainBlueTitleColor
+        }else{
+            tabBar.tintColor = K.mainNavy
+        }
         
         
         let diaryVC = DiaryViewController()
@@ -33,12 +39,12 @@ class HomeViewController: UITabBarController {
         
         let bookImage = UIImage(systemName: "book.closed.fill",
                                 withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .bold), scale: .large))
-        let penImage = UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .bold), scale: .large))
-        let gearkImage = UIImage(systemName: "gear", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .bold), scale: .large))
+        let penImage = UIImage(systemName: "plus.circle.fill", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 20, weight: .bold), scale: .large))
+        let gearkImage = UIImage(systemName: "gearshape", withConfiguration: UIImage.SymbolConfiguration(font: .systemFont(ofSize: 18, weight: .bold), scale: .large))
 
         
         nav1.tabBarItem = UITabBarItem(title: "", image: bookImage!.withBaselineOffset(fromBottom: 15), tag: 0)
-        nav2.tabBarItem = UITabBarItem(title: "", image: penImage!.withBaselineOffset(fromBottom: 15), tag: 1)
+        nav2.tabBarItem = UITabBarItem(title: "", image: penImage!.withBaselineOffset(fromBottom: 16), tag: 1)
         nav3.tabBarItem = UITabBarItem(title: "", image: gearkImage!.withBaselineOffset(fromBottom: 15), tag: 2)
         
         setViewControllers([nav1, nav2, nav3], animated: true)

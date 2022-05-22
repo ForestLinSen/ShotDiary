@@ -34,13 +34,26 @@ class WritingDiaryViewController: UIViewController {
     var viewModelForEdit: DiaryViewModel?
     var onlineVideo = false
     
+    var isDarkMode: Bool{
+        return traitCollection.userInterfaceStyle == .dark
+    }
+    
+    
     private let titleEditor: UITextField = {
         let titleEditor = UITextField()
         titleEditor.attributedPlaceholder = NSAttributedString(string: "Untitled", attributes: [NSAttributedString.Key.foregroundColor: K.mainNavy])
         titleEditor.font = .systemFont(ofSize: 30, weight: .bold)
         titleEditor.layer.cornerRadius = 5
         titleEditor.textColor = K.mainNavy
+        //titleEditor.backgroundColor = .systemBackground
         return titleEditor
+    }()
+    
+    private let backgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemBackground
+        view.layer.cornerRadius = 30
+        return view
     }()
     
     private let textEditor: UITextView = {
@@ -59,30 +72,30 @@ class WritingDiaryViewController: UIViewController {
         button.contentHorizontalAlignment = .fill
         button.imageView?.contentMode = .scaleAspectFit
         button.imageView?.clipsToBounds = true
-        button.tintColor = .white
+        button.tintColor = .tertiaryLabel
         return button
     }()
     
     private let videoFrame: UIView = {
         let view = UIView()
         view.layer.cornerRadius = 12
-        view.backgroundColor = K.mainNavy
+        view.backgroundColor = .secondarySystemFill
         return view
     }()
     
     private let cancelButton: UIButton = {
         let button = UIButton()
-        button.setImage(UIImage(systemName: "xmark.bin.circle.fill"), for: .normal)
+        button.setImage(UIImage(systemName: "trash.circle"), for: .normal)
         button.contentVerticalAlignment = .fill
         button.contentHorizontalAlignment = .fill
         button.imageView?.contentMode = .scaleAspectFit
-        button.tintColor = .lightGray
+        button.tintColor = .tertiaryLabel
         return button
     }()
     
     private let rightBarButton: UIButton = {
         let rightBarButton = UIButton()
-        rightBarButton.frame = CGRect(x: 0, y: 0, width: 64, height: 34)
+        rightBarButton.frame = CGRect(x: 0, y: 0, width: 60, height: 30)
         
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = K.mainOrange
@@ -100,7 +113,7 @@ class WritingDiaryViewController: UIViewController {
     
     private let rightBarEditButton: UIButton = {
         let rightBarButton = UIButton()
-        rightBarButton.frame = CGRect(x: 0, y: 0, width: 64, height: 34)
+        rightBarButton.frame = CGRect(x: 0, y: 0, width: 60, height: 30)
         
         var config = UIButton.Configuration.filled()
         config.baseBackgroundColor = K.mainOrange
@@ -131,7 +144,8 @@ class WritingDiaryViewController: UIViewController {
         
         tabBarController?.tabBar.selectedItem?.title = ""
 
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .secondarySystemBackground
+        view.addSubview(backgroundView)
         view.addSubview(textEditor)
         view.addSubview(titleEditor)
         view.addSubview(videoFrame)
@@ -153,6 +167,14 @@ class WritingDiaryViewController: UIViewController {
         navBarAppearance.titleTextAttributes = [.foregroundColor: UIColor.white]
         navigationController?.navigationBar.scrollEdgeAppearance = navBarAppearance
         navigationController?.navigationBar.standardAppearance = navBarAppearance
+        
+        if isDarkMode{
+            titleEditor.textColor = .label
+            titleEditor.attributedPlaceholder = NSAttributedString(string: "Untitled", attributes: [NSAttributedString.Key.foregroundColor: UIColor.secondaryLabel])
+            textEditor.textColor = .secondaryLabel
+            
+        }
+
     }
     
     override func viewDidLayoutSubviews() {
@@ -164,19 +186,28 @@ class WritingDiaryViewController: UIViewController {
         let padding = CGFloat(20)
         let buttonSize = CGFloat(45)
         
-        let playerSize = view.frame.width*0.38
-        videoFrame.frame = CGRect(x: (view.frame.width-playerSize)/2, y: view.safeAreaInsets.bottom + padding, width: playerSize, height: playerSize)
+        let playerSizeWidth = view.frame.width*0.28
+        let playerSizeHeight = playerSizeWidth*1.52
         
-        addVideoButton.frame = CGRect(x: (view.frame.width-buttonSize)/2,
-                                      y: view.safeAreaInsets.bottom + padding + (videoFrame.frame.height-buttonSize)/2,
-                                      width: buttonSize, height: buttonSize)
+        // (view.frame.width-playerSizeWidth)/2
         
-        
-        
-        titleEditor.frame = CGRect(x: leftPadding, y: videoFrame.frame.origin.y+videoFrame.frame.height+padding*3.5,
+        titleEditor.frame = CGRect(x: leftPadding, y: view.safeAreaInsets.bottom+padding*2,
                                    width: editorWidth, height: titleHeight)
         textEditor.frame = CGRect(x: leftPadding, y: titleEditor.frame.origin.y+titleEditor.frame.height+padding,
-                                  width: editorWidth, height: 100)
+                                  width: editorWidth, height: 152)
+        
+        videoFrame.frame = CGRect(x: leftPadding, y: textEditor.frame.origin.y + textEditor.frame.height + padding*2,
+                                  width: playerSizeWidth, height: playerSizeHeight)
+        
+        addVideoButton.frame = CGRect(x: leftPadding+playerSizeWidth/2-buttonSize/2,
+                                      y: textEditor.frame.origin.y + textEditor.frame.height + (videoFrame.frame.height-buttonSize)/2 + padding*2,
+                                      width: buttonSize, height: buttonSize)
+        
+        backgroundView.frame = CGRect(x: leftPadding/2, y: view.safeAreaInsets.bottom+padding*1.5,
+                                      width: view.frame.width-leftPadding,
+                                      height: titleHeight + 240 + playerSizeHeight + buttonSize)
+        
+        
         
         
         let bottomLine = CALayer()
@@ -211,7 +242,7 @@ class WritingDiaryViewController: UIViewController {
             
             let buttonSize = CGFloat(40)
             strongSelf.view.addSubview(strongSelf.cancelButton)
-            strongSelf.cancelButton.frame = CGRect(x: (strongSelf.view.frame.width-buttonSize)/2,
+            strongSelf.cancelButton.frame = CGRect(x: strongSelf.videoFrame.frame.origin.x + (strongSelf.videoFrame.frame.width-buttonSize)/2,
                                                    y: strongSelf.videoFrame.frame.origin.y + strongSelf.videoFrame.frame.height + 10,
                                                    width: buttonSize,
                                                    height: buttonSize)
@@ -397,13 +428,23 @@ extension WritingDiaryViewController: UITextViewDelegate, UITextPasteDelegate{
         if textView.textColor == K.mainNavy{
             textView.text = ""
             textView.textColor = K.mainBlack
+        }else if textView.textColor == .secondaryLabel{
+            textView.text = ""
+            textView.textColor = K.grayTextColorWithBackground
         }
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.count == 0{
             textView.text = "How are you today?"
-            textView.textColor = K.mainNavy
+            
+            if isDarkMode{
+                textView.textColor = .secondaryLabel
+            }else{
+                textView.textColor = K.mainNavy
+            }
+            
+            
         }
     }
     
@@ -432,6 +473,8 @@ extension WritingDiaryViewController: PHPickerViewControllerDelegate{
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         
+        ProgressHUD.show("Uploading...")
+        
         results.first?.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier, completionHandler: {[weak self] url, error in
             guard let url = url else {
                 return
@@ -452,7 +495,7 @@ extension WritingDiaryViewController: PHPickerViewControllerDelegate{
                 try FileManager.default.copyItem(at: url, to: filePath)
                 self?.videoURL = filePath
                 self?.displayChosenVideo()
-                
+                ProgressHUD.dismiss()
             }catch{
                 print("Debug: something wrong -> \(error)")
             }
