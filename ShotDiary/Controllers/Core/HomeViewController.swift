@@ -6,19 +6,14 @@
 //
 
 import UIKit
+import MetricKit
 
 class HomeViewController: UITabBarController {
-
-    
-//    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-//        diaryVC = DiaryViewController()
-//        nav1 = UINavigationController(rootViewController: diaryVC)
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupMetricKit()
+        mxSignpost(.event, log: MXMetricManager.controllerLoad, name: "Debug: sign post")
         
         let appearance = UITabBarAppearance()
         appearance.backgroundColor = K.mainNavy
@@ -52,6 +47,27 @@ class HomeViewController: UITabBarController {
         tabBar.frame.size.height = kBarHeight
         tabBar.frame.origin.y = view.frame.height - kBarHeight
     }
+    
+    private func setupMetricKit(){
+        // https://www.raywenderlich.com/20952676-monitoring-for-ios-with-metrickit-getting-started
+        let manager = MXMetricManager.shared
+        manager.add(self)
+    }
 
 }
 
+
+extension HomeViewController: MXMetricManagerSubscriber{
+    func didReceive(_ payloads: [MXMetricPayload]) {
+        
+        payloads.forEach { payload in
+            print("Debug: payload: \(String(describing: payload.dictionaryRepresentation()))")
+        }
+    }
+
+}
+
+
+extension MXMetricManager{
+    static let controllerLoad = MXMetricManager.makeLogHandle(category: "controllerLoad")
+}
