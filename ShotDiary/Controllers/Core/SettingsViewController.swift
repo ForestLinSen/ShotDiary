@@ -14,6 +14,7 @@ class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Settings"
+        tabBarController?.tabBar.selectedItem?.title = ""
 
         view.backgroundColor = .systemBackground
         configureTableView()

@@ -116,6 +116,10 @@ class WritingDiaryViewController: UIViewController {
         return rightBarButton
     }()
     
+    override var preferredStatusBarStyle: UIStatusBarStyle{
+        return .lightContent
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -124,6 +128,8 @@ class WritingDiaryViewController: UIViewController {
         }else{
             title = "Write"
         }
+        
+        tabBarController?.tabBar.selectedItem?.title = ""
 
         view.backgroundColor = .systemBackground
         view.addSubview(textEditor)

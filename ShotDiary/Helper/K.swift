@@ -24,7 +24,7 @@ class K{
     
     static let mainBlack = UIColor(red: 0.14, green: 0.1, blue: 0.22, alpha: 1.0)
     static let mainNavy = UIColor(red: 0.16, green: 0.14, blue: 0.31, alpha: 1.0)
-    static let mainNavyBackground = UIColor(red: 0.16, green: 0.14, blue: 0.31, alpha: 0.8)
+    static let mainNavyBackground = UIColor(red: 0.16, green: 0.14, blue: 0.31, alpha: 0.9)
     static let mainNavySegmentsBackground = UIColor(red: 0.16, green: 0.14, blue: 0.31, alpha: 0.3)
     static let mainOrange = UIColor(red: 0.87, green: 0.3, blue: 0, alpha: 1.0)
     
