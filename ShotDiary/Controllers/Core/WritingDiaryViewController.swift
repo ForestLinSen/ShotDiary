@@ -86,6 +86,9 @@ class WritingDiaryViewController: UIViewController {
     private let datePicker: UIDatePicker = {
         let datePicker = UIDatePicker()
         datePicker.datePickerMode = .date
+        datePicker.preferredDatePickerStyle = .automatic
+        datePicker.layer.cornerRadius = 10
+        datePicker.setValue(UIColor.secondaryLabel, forKey: "textColor")
         return datePicker
     }()
     

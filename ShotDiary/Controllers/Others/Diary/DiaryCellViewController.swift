@@ -282,6 +282,14 @@ extension DiaryCellViewController: WritingDiaryViewControllerInEditMode{
         player = AVPlayer(url: fileURL)
         playerLayer?.player = player
         player?.play()
+        
+        observer = NotificationCenter.default.addObserver(forName: .AVPlayerItemDidPlayToEndTime,
+                                                          object: player?.currentItem,
+                                                          queue: .main,
+                                                          using: {[weak self] _ in
+            self?.player?.seek(to: .zero)
+            self?.player?.play()
+        })
     }
 
 }
