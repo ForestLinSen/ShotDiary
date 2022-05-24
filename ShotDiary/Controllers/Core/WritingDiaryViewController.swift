@@ -19,7 +19,7 @@ protocol WritingDiaryViewControllerDelegate: UIViewController{
 }
 
 protocol WritingDiaryViewControllerInEditMode: UIViewController{
-    func writingDiaryViewControllerDidFinishEditing(_ controller: WritingDiaryViewController, title: String, content: String, fileName: String)
+    func writingDiaryViewControllerDidFinishEditing(_ controller: WritingDiaryViewController, title: String, date: Date, content: String, fileName: String)
 }
 
 class WritingDiaryViewController: UIViewController {
@@ -81,6 +81,12 @@ class WritingDiaryViewController: UIViewController {
         view.layer.cornerRadius = 12
         view.backgroundColor = .secondarySystemFill
         return view
+    }()
+    
+    private let datePicker: UIDatePicker = {
+        let datePicker = UIDatePicker()
+        datePicker.datePickerMode = .date
+        return datePicker
     }()
     
     private let cancelButton: UIButton = {
@@ -149,6 +155,7 @@ class WritingDiaryViewController: UIViewController {
         view.addSubview(textEditor)
         view.addSubview(titleEditor)
         view.addSubview(videoFrame)
+        view.addSubview(datePicker)
         view.addSubview(addVideoButton)
         
         textEditor.delegate = self
@@ -161,6 +168,8 @@ class WritingDiaryViewController: UIViewController {
         
         addVideoButton.addTarget(self, action: #selector(didTapAddVideoButton), for: .touchUpInside)
         displayChosenVideo()
+        
+        datePicker.addTarget(self, action: #selector(datePickerValueChanged), for: .valueChanged)
         
         let navBarAppearance = UINavigationBarAppearance()
         navBarAppearance.backgroundColor = K.mainNavy
@@ -175,6 +184,10 @@ class WritingDiaryViewController: UIViewController {
             
         }
 
+    }
+    
+    @objc func datePickerValueChanged(_ sender: UIDatePicker){
+        print("Debug: date -> \(sender.date)")
     }
     
     override func viewDidLayoutSubviews() {
@@ -193,11 +206,18 @@ class WritingDiaryViewController: UIViewController {
         
         titleEditor.frame = CGRect(x: leftPadding, y: view.safeAreaInsets.bottom+padding*2,
                                    width: editorWidth, height: titleHeight)
-        textEditor.frame = CGRect(x: leftPadding, y: titleEditor.frame.origin.y+titleEditor.frame.height+padding,
+        
+        datePicker.frame = CGRect(x: leftPadding, y: titleEditor.frame.origin.y+titleEditor.frame.height,
+                                  width: 40, height: 40)
+        datePicker.sizeToFit()
+        
+        textEditor.frame = CGRect(x: leftPadding, y: titleEditor.frame.origin.y+titleEditor.frame.height+padding+40,
                                   width: editorWidth, height: 152)
         
         videoFrame.frame = CGRect(x: leftPadding, y: textEditor.frame.origin.y + textEditor.frame.height + padding*2,
                                   width: playerSizeWidth, height: playerSizeHeight)
+        
+        
         
         addVideoButton.frame = CGRect(x: leftPadding+playerSizeWidth/2-buttonSize/2,
                                       y: textEditor.frame.origin.y + textEditor.frame.height + (videoFrame.frame.height-buttonSize)/2 + padding*2,
@@ -205,16 +225,16 @@ class WritingDiaryViewController: UIViewController {
         
         backgroundView.frame = CGRect(x: leftPadding/2, y: view.safeAreaInsets.bottom+padding*1.5,
                                       width: view.frame.width-leftPadding,
-                                      height: titleHeight + 240 + playerSizeHeight + buttonSize)
+                                      height: titleHeight + 270 + playerSizeHeight + buttonSize)
         
         
         
         
-        let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0, y: titleEditor.frame.height-1, width: titleEditor.frame.width, height: 1.0)
-        bottomLine.backgroundColor = K.mainTextColor.cgColor
-        titleEditor.borderStyle = .none
-        titleEditor.layer.addSublayer(bottomLine)
+//        let bottomLine = CALayer()
+//        bottomLine.frame = CGRect(x: 0, y: titleEditor.frame.height-1, width: titleEditor.frame.width, height: 1.0)
+//        bottomLine.backgroundColor = K.mainTextColor.cgColor
+//        titleEditor.borderStyle = .none
+//        titleEditor.layer.addSublayer(bottomLine)
         
         //textEditor.backgroundColor = .systemBlue
         
@@ -312,13 +332,14 @@ class WritingDiaryViewController: UIViewController {
                     
                     DispatchQueue.main.async {
                         // FOR TEST
-                        let date1 = Date.parse("2022-01-01")
-                        let date2 = Date.parse("2022-05-01")
+//                        let date1 = Date.parse("2022-01-01")
+//                        let date2 = Date.parse("2022-05-01")
+//                        Date.randomBetween(start: date1, end: date2)
                         
                         let viewModel = DiaryViewModel(title: (strongSelf.titleEditor.text?.count == 0 ? "Untitled" : strongSelf.titleEditor.text) ?? "Untitled",
                                                        content: strongSelf.textEditor.text ?? "",
                                                        fileURL: strongSelf.fileName!,
-                                                       date: Date.randomBetween(start: date1, end: date2),
+                                                       date: strongSelf.datePicker.date,
                                                        diaryID: UUID())
                         
                         CoreDataManager.shared.createItems(viewModel: viewModel){ success in
@@ -343,13 +364,11 @@ class WritingDiaryViewController: UIViewController {
                 let fileURL = folderURL.appendingPathComponent(fileName!)
                 let data = try Data(contentsOf: videoURL!)
                 try data.write(to: fileURL)
-                
-                
-                // FOR TEST
-                let date1 = Date.parse("2022-01-01")
-                let date2 = Date.parse("2022-05-01")
-                
-                let viewModel = DiaryViewModel(title: (titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text) ?? "Untitled", content: textEditor.text ?? "", fileURL: fileName!, date: Date.randomBetween(start: date1, end: date2), diaryID: UUID())
+
+                let viewModel = DiaryViewModel(title: (titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text) ?? "Untitled",
+                                               content: textEditor.text ?? "", fileURL: fileName!,
+                                               date: datePicker.date,
+                                               diaryID: UUID())
                 
                 CoreDataManager.shared.createItems(viewModel: viewModel){[weak self] success in
                     guard let strongSelf = self else { return }
@@ -473,9 +492,9 @@ extension WritingDiaryViewController: PHPickerViewControllerDelegate{
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true)
         
-        ProgressHUD.show("Uploading...")
-        
+
         results.first?.itemProvider.loadFileRepresentation(forTypeIdentifier: UTType.movie.identifier, completionHandler: {[weak self] url, error in
+            ProgressHUD.show("Uploading...")
             guard let url = url else {
                 return
             }
@@ -565,11 +584,12 @@ extension WritingDiaryViewController{
                     try data.write(to: fileURL)
                     CoreDataManager.shared.updateItem(for: viewModel.diaryID,
                                                       title: title,
+                                                      date: datePicker.date,
                                                       content: content,
                                                       fileName: fileName!)
                     self.dismiss(animated: true)
                     self.delegate?.writingDiaryViewControllerDidFinishEditing(self)
-                    self.editDelegate?.writingDiaryViewControllerDidFinishEditing(self, title: title, content: content, fileName: fileName!)
+                    self.editDelegate?.writingDiaryViewControllerDidFinishEditing(self, title: title, date: datePicker.date, content: content, fileName: fileName!)
                 }catch{
                     
                 }
@@ -587,12 +607,13 @@ extension WritingDiaryViewController{
                         DispatchQueue.main.async {
                             CoreDataManager.shared.updateItem(for: viewModel.diaryID,
                                                               title: title,
+                                                              date: self.datePicker.date,
                                                               content: content,
                                                               fileName: self.fileName!)
                             ProgressHUD.dismiss()
                             self.dismiss(animated: true)
                             self.delegate?.writingDiaryViewControllerDidFinishEditing(self)
-                            self.editDelegate?.writingDiaryViewControllerDidFinishEditing(self, title: title, content: content, fileName: self.fileName!)
+                            self.editDelegate?.writingDiaryViewControllerDidFinishEditing(self, title: title, date: self.datePicker.date, content: content, fileName: self.fileName!)
                         }
                     }
                 }
@@ -602,11 +623,12 @@ extension WritingDiaryViewController{
             print("Debug: didn't change the video")
             CoreDataManager.shared.updateItem(for: viewModel.diaryID,
                                               title: titleEditor.text?.count == 0 ? "Untitled" : titleEditor.text!,
+                                              date: datePicker.date,
                                               content: textEditor.text ?? "",
                                               fileName: fileName!)
             self.dismiss(animated: true)
             self.delegate?.writingDiaryViewControllerDidFinishEditing(self)
-            self.editDelegate?.writingDiaryViewControllerDidFinishEditing(self, title: title, content: content, fileName: fileName!)
+            self.editDelegate?.writingDiaryViewControllerDidFinishEditing(self, title: title, date: datePicker.date, content: content, fileName: fileName!)
         }
         
         

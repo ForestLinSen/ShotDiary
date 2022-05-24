@@ -88,6 +88,10 @@ class DiaryViewController: UIViewController {
         navigationController?.navigationBar.standardAppearance = navBarAppearance
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
     private func fetchData(completion: @escaping (Bool) -> Void){
         CoreDataManager.shared.getAllItems {[weak self] viewModels in
             guard let viewModels = viewModels else {
@@ -120,6 +124,12 @@ class DiaryViewController: UIViewController {
     
     
     @objc func segmentedControlDidChange(_ sender: UISegmentedControl){
+        if sender.selectedSegmentIndex == 2{
+            tabBarController?.tabBar.isHidden = true
+        }else{
+            tabBarController?.tabBar.isHidden = false
+        }
+        
         UIView.animate(withDuration: 0.4) {
             self.scrollView.contentOffset.x = CGFloat(sender.selectedSegmentIndex)*self.view.frame.width
             if self.scrollView.contentOffset.x < self.view.frame.width*2 && self.navigationItem.searchController == nil{
@@ -354,7 +364,6 @@ extension DiaryViewController: UIScrollViewDelegate{
 
         if offset > view.frame.width*0.6{
             segmentedControl.selectedSegmentIndex = 1
-            tabBarController?.tabBar.isHidden = false
             if navigationItem.searchController == nil{
                 navigationItem.searchController = searchView
             }
@@ -363,12 +372,10 @@ extension DiaryViewController: UIScrollViewDelegate{
         if offset > view.frame.width*1.6{
             segmentedControl.selectedSegmentIndex = 2
             navigationItem.searchController = nil
-            tabBarController?.tabBar.isHidden = true
         }
         
         if offset < view.frame.width*0.6 && offset > 1{
             segmentedControl.selectedSegmentIndex = 0
-            tabBarController?.tabBar.isHidden = false
             if navigationItem.searchController == nil{
                 navigationItem.searchController = searchView
             }

@@ -61,13 +61,14 @@ class CoreDataManager{
         }
     }
     
-    func updateItem(for id: UUID, title: String, content: String, fileName: String){
+    func updateItem(for id: UUID, title: String, date: Date, content: String, fileName: String){
         let fetchRequest = Diary.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "diaryID = %@", id as CVarArg)
         
         do{
             guard let diary = try context.fetch(fetchRequest).first else { return }
             diary.title = title
+            diary.date = date
             diary.content = content
             diary.fileURL = fileName
             try context.save()

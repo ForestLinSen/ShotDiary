@@ -273,14 +273,15 @@ class DiaryCellViewController: UIViewController {
 
 
 extension DiaryCellViewController: WritingDiaryViewControllerInEditMode{
-    func writingDiaryViewControllerDidFinishEditing(_ controller: WritingDiaryViewController, title: String, content: String, fileName: String) {
+    func writingDiaryViewControllerDidFinishEditing(_ controller: WritingDiaryViewController, title: String, date: Date, content: String, fileName: String) {
         titleLabel.text = title
         contentLabel.text = content
+        dateLabel.text = Helper.formatDate(date: date)
         
         let fileURL = DiaryViewModel.getRelativeFilePath(with: fileName)
         player = AVPlayer(url: fileURL)
         playerLayer?.player = player
         player?.play()
     }
-    
+
 }
