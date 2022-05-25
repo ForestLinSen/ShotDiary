@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct SearchVideoViewModel{
+struct SearchVideoViewModel {
     let videoURL: URL
     let previewImageURL: URL
 }

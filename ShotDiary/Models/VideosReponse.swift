@@ -7,19 +7,19 @@
 
 import Foundation
 
-struct VideosResponse: Codable{
+struct VideosResponse: Codable {
     let url: String
     let videos: [PexelsVideo]
 }
 
-struct PexelsVideo: Codable{
+struct PexelsVideo: Codable {
     let id: Int
     let url: String
     let image: String
     let video_files: [VideoFiles]
 }
 
-struct VideoFiles: Codable{
+struct VideoFiles: Codable {
     let id: Int
     let quality: String
     let link: String

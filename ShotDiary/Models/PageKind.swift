@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum PageKind{
+enum PageKind {
     case collection
     case gallery
 }

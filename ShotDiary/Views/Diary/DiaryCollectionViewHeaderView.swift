@@ -7,7 +7,7 @@
 
 import UIKit
 
-class DiaryCollectionViewHeaderView: UICollectionReusableView{
+class DiaryCollectionViewHeaderView: UICollectionReusableView {
     static let identifier = "DiaryCollectionViewHeaderView"
 
     private let sectionLabel: UILabel = {
@@ -17,23 +17,23 @@ class DiaryCollectionViewHeaderView: UICollectionReusableView{
         label.numberOfLines = 1
         return label
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(sectionLabel)
         backgroundColor = .systemBackground
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
         sectionLabel.frame = CGRect(x: 15, y: 0, width: frame.width, height: frame.height)
     }
-    
-    func configure(with label: String){
+
+    func configure(with label: String) {
         sectionLabel.text = label
     }
 }

@@ -7,35 +7,35 @@
 
 import Foundation
 
-class Helper{
-    static func generateVideoFileName() -> String{
+class Helper {
+    static func generateVideoFileName() -> String {
         return "\(UUID().uuidString)_\(dateGenerate()).mov"
     }
-    
-    static func dateGenerate() -> String{
+
+    static func dateGenerate() -> String {
         let dateValue = Calendar.current.dateComponents([.year, .month, .day], from: Date())
         let dateString = "\(dateValue.year!)_\(dateValue.month!)_\(dateValue.day!)"
         return dateString
     }
-    
+
     // https://www.zerotoappstore.com/get-year-month-day-from-date-swift.html
-    static func formatDate(date: Date) -> String{
+    static func formatDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = .current
         dateFormatter.timeZone = .current
         dateFormatter.dateFormat = "EEEE, MMMM d, yyyy "
         return dateFormatter.string(from: date)
     }
-    
-    static func formateCollectionDate(date: Date) -> String{
+
+    static func formateCollectionDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = .current
         dateFormatter.timeZone = .current
         dateFormatter.dateFormat = "MMMM yyyy"
         return dateFormatter.string(from: date)
     }
-    
-    static func formateCollectionCellDate(date: Date) -> String{
+
+    static func formateCollectionCellDate(date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = .current
         dateFormatter.timeZone = .current
@@ -44,9 +44,8 @@ class Helper{
     }
 }
 
-
 extension Date {
-    
+
     static func randomBetween(start: String, end: String, format: String = "yyyy-MM-dd") -> String {
         let date1 = Date.parse(start, format: format)
         let date2 = Date.parse(end, format: format)

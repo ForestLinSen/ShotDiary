@@ -9,7 +9,7 @@ import UIKit
 
 class DiaryCollectionViewCell: UICollectionViewCell {
     static let identifier = "DiaryCollectionViewCell"
-    
+
     private let previewImage: UIImageView = {
         let imageView = UIImageView()
         imageView.clipsToBounds = true
@@ -17,22 +17,21 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         imageView.layer.cornerRadius = 12
         return imageView
     }()
-    
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .semibold)
         label.textColor = .label
         return label
     }()
-    
+
     private let dateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14, weight: .regular)
         label.textColor = .secondaryLabel
         return label
     }()
-    
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(previewImage)
@@ -41,11 +40,11 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         backgroundColor = .systemBackground
 
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
@@ -58,13 +57,13 @@ class DiaryCollectionViewCell: UICollectionViewCell {
         dateLabel.frame = CGRect(x: 0, y: imageSize+labelHeight+padding, width: frame.width, height: labelHeight)
 
     }
-    
-    func configure(with viewModel: DiaryViewModel){
+
+    func configure(with viewModel: DiaryViewModel) {
         previewImage.image = viewModel.getPreviewImage()
         titleLabel.text = viewModel.title
         dateLabel.text = viewModel.displayCollectionCellDate
     }
-    
+
     override func prepareForReuse() {
         super.prepareForReuse()
         previewImage.image = nil
