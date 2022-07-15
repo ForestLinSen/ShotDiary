@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B901080F283E8866000EA814 /* ShotDiaryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B901080E283E8866000EA814 /* ShotDiaryTests.swift */; };
 		B9068CD328242BDC002B244A /* DiaryCellViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9068CD228242BDC002B244A /* DiaryCellViewController.swift */; };
 		B9323C0F2822AD3900E25F24 /* GroupedDiaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9323C0E2822AD3900E25F24 /* GroupedDiaryViewModel.swift */; };
 		B933994E2820EEAA00F779C0 /* ShotDiary.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = B933994C2820EEAA00F779C0 /* ShotDiary.xcdatamodeld */; };
@@ -42,7 +43,19 @@
 		B9E59DD228323D5800F39850 /* DiarySearchResultViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9E59DD128323D5800F39850 /* DiarySearchResultViewController.swift */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		B9010810283E8866000EA814 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B9B861FB281FE386004D1B75 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B9B86202281FE386004D1B75;
+			remoteInfo = ShotDiary;
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
+		B901080C283E8866000EA814 /* ShotDiaryTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShotDiaryTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B901080E283E8866000EA814 /* ShotDiaryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShotDiaryTests.swift; sourceTree = "<group>"; };
 		B9068CD228242BDC002B244A /* DiaryCellViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiaryCellViewController.swift; sourceTree = "<group>"; };
 		B9323C0E2822AD3900E25F24 /* GroupedDiaryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GroupedDiaryViewModel.swift; sourceTree = "<group>"; };
 		B933994D2820EEAA00F779C0 /* DiaryDataModel.xcdatamodel */ = {isa = PBXFileReference; explicitFileType = wrapper.xcdatamodel; path = DiaryDataModel.xcdatamodel; sourceTree = "<group>"; };
@@ -79,6 +92,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		B9010809283E8866000EA814 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B9B86200281FE386004D1B75 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -91,6 +111,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B901080D283E8866000EA814 /* ShotDiaryTests */ = {
+			isa = PBXGroup;
+			children = (
+				B901080E283E8866000EA814 /* ShotDiaryTests.swift */,
+			);
+			path = ShotDiaryTests;
+			sourceTree = "<group>";
+		};
 		B9068CD128242BC3002B244A /* Diary */ = {
 			isa = PBXGroup;
 			children = (
@@ -196,6 +224,7 @@
 			isa = PBXGroup;
 			children = (
 				B9B86205281FE386004D1B75 /* ShotDiary */,
+				B901080D283E8866000EA814 /* ShotDiaryTests */,
 				B9B86204281FE386004D1B75 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -204,6 +233,7 @@
 			isa = PBXGroup;
 			children = (
 				B9B86203281FE386004D1B75 /* ShotDiary.app */,
+				B901080C283E8866000EA814 /* ShotDiaryTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -269,6 +299,24 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		B901080B283E8866000EA814 /* ShotDiaryTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B9010814283E8866000EA814 /* Build configuration list for PBXNativeTarget "ShotDiaryTests" */;
+			buildPhases = (
+				B9010808283E8866000EA814 /* Sources */,
+				B9010809283E8866000EA814 /* Frameworks */,
+				B901080A283E8866000EA814 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B9010811283E8866000EA814 /* PBXTargetDependency */,
+			);
+			name = ShotDiaryTests;
+			productName = ShotDiaryTests;
+			productReference = B901080C283E8866000EA814 /* ShotDiaryTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		B9B86202281FE386004D1B75 /* ShotDiary */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B9B86217281FE388004D1B75 /* Build configuration list for PBXNativeTarget "ShotDiary" */;
@@ -300,6 +348,10 @@
 				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1330;
 				TargetAttributes = {
+					B901080B283E8866000EA814 = {
+						CreatedOnToolsVersion = 13.3;
+						TestTargetID = B9B86202281FE386004D1B75;
+					};
 					B9B86202281FE386004D1B75 = {
 						CreatedOnToolsVersion = 13.3;
 					};
@@ -323,11 +375,19 @@
 			projectRoot = "";
 			targets = (
 				B9B86202281FE386004D1B75 /* ShotDiary */,
+				B901080B283E8866000EA814 /* ShotDiaryTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		B901080A283E8866000EA814 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B9B86201281FE386004D1B75 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -341,6 +401,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		B9010808283E8866000EA814 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B901080F283E8866000EA814 /* ShotDiaryTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B9B861FF281FE386004D1B75 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -378,6 +446,14 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		B9010811283E8866000EA814 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B9B86202281FE386004D1B75 /* ShotDiary */;
+			targetProxy = B9010810283E8866000EA814 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin PBXVariantGroup section */
 		B9B8620C281FE386004D1B75 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
@@ -398,6 +474,42 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		B9010812283E8866000EA814 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QD49F8UH37;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = senlin.ShotDiaryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShotDiary.app/ShotDiary";
+			};
+			name = Debug;
+		};
+		B9010813283E8866000EA814 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = QD49F8UH37;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = senlin.ShotDiaryTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/ShotDiary.app/ShotDiary";
+			};
+			name = Release;
+		};
 		B9B86215281FE388004D1B75 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -571,6 +683,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		B9010814283E8866000EA814 /* Build configuration list for PBXNativeTarget "ShotDiaryTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B9010812283E8866000EA814 /* Debug */,
+				B9010813283E8866000EA814 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B9B861FE281FE386004D1B75 /* Build configuration list for PBXProject "ShotDiary" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
