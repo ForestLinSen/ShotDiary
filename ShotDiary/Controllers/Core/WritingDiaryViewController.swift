@@ -332,7 +332,7 @@ class WritingDiaryViewController: UIViewController {
 
                         let viewModel = DiaryViewModel(title: (strongSelf.titleEditor.text?.count == 0 ? "Untitled" : strongSelf.titleEditor.text) ?? "Untitled",
                                                        content: strongSelf.textEditor.text ?? "",
-                                                       fileURL: strongSelf.fileName!,
+                                                       fileURL: strongSelf.fileName ?? "",
                                                        date: strongSelf.datePicker.date,
                                                        diaryID: UUID())
 

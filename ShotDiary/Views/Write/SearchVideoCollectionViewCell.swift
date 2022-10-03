@@ -55,8 +55,8 @@ class SearchVideoCollectionViewCell: UICollectionViewCell {
 
     override func prepareForReuse() {
         super.prepareForReuse()
-        playerController.player?.pause()
-        playerController.player = nil
+//        playerController.player?.pause()
+//        playerController.player = nil
     }
 
     func configure(with viewModel: SearchVideoViewModel) {
