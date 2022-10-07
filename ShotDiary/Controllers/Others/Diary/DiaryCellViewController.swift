@@ -189,6 +189,7 @@ class DiaryCellViewController: UIViewController {
             self.titleLabel.sizeToFit()
             self.fullTextView.sizeToFit()
             self.fullTextView.frame.size.height = min(self.fullTextView.frame.height, contentLabelHeight)
+            self.fullTextView.frame.size.width = max(self.fullTextView.frame.width, contentWidth)
 
             self.contentLabel.removeFromSuperview()
 
